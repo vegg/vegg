@@ -9,7 +9,7 @@
     <script type="text/javascript" src="lutir.js"></script>
     
     <meta charset="utf-8" />
-    <title>Veggur 0.3</title>
+    <title>Veggur 0.1</title>
 </head>
 
 <body>
