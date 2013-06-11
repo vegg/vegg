@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Projection of feed</title>
-    <script src="jquery-1.7.2.min.js"></script>
+    <script src="jquery.min.js"></script>
     <style>
         body {
             background-color: #000000;

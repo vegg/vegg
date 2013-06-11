@@ -5,7 +5,7 @@
 <head>
     <link type="text/css" rel="stylesheet" href="style.css" />
     
-    <script src="jquery-1.7.2.min.js"></script>
+    <script src="jquery.min.js"></script>
     <script type="text/javascript" src="lutir.js"></script>
     
     <meta charset="utf-8" />
