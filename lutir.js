@@ -663,7 +663,7 @@ var akkordSkipan = {
         document.getElementById("jFylg").innerHTML =
             '<a href="#" onclick="akkordSkipan.vidkaMarkering('+ordId+', '+bokstavId+')" ><img src="grafikkur/pluss.png" style="z-index:2"></a><a href="#" onclick="akkordSkipan.minkaMarkering('+ordId+','+bokstavId+')"><img src="grafikkur/minus.png" style="z-index:2"></a>';
     },
-    
+
     // 2. Funktiónir til at markera orð og stilla markeringina
     
     markeraOrd: function(ordId, bokstavId) {
