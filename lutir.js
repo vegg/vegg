@@ -905,7 +905,7 @@ var akkordSkipan = {
             this.akkordirISangi[this.vers] = {};
         }
         
-        this.akkordirISangi[this.vers][this.ordSumErMarkerad] = akkordir;
+        this.akkordirISangi[this.vers][this.ordSumErMarkerad+""] = akkordir;
 
     },
     
