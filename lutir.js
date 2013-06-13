@@ -727,15 +727,25 @@ var akkordSkipan = {
     },
     
     vidkaMarkering : function(ordId, bokstvId) {
+        var bokstavatal = this.telBokstavirIOrdi(ordId);
+        
         //Um man trýstir á + á eitt nýtt orð, gloymist markering av fyrrvr. orðið.
         if(akkordSkipan.ordSumErMinkad != akkordSkipan.ordSumErMarkerad) {
             akkordSkipan.ordSumErMinkad = ordId;
-            akkordSkipan.bokstavamongIMinkadumOrdi = this.telBokstavirIOrdi(ordId);
+            akkordSkipan.bokstavamongIMinkadumOrdi = bokstavatal;
+            //akkordSkipan.bokstavamongIMinkadumOrdi = this.telBokstavirIOrdi(ordId);
         }
         else {
-            if(akkordSkipan.bokstavamongIMinkadumOrdi < this.telBokstavirIOrdi(ordId)) {
+            if(akkordSkipan.bokstavamongIMinkadumOrdi < bokstavatal) {
                 akkordSkipan.bokstavamongIMinkadumOrdi++;
                 this.markeraOrd(ordId, bokstvId);
+            }
+            
+            if(akkordSkipan.bokstavamongIMinkadumOrdi == bokstavatal) {
+                this.ordSumErMinkad = null;
+                this.bokstavamongIMinkadumOrdi = null;
+                this.markeringByrjan = null;
+                this.markeringEndi = null;
             }
         }
     },
