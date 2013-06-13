@@ -693,7 +693,7 @@ var akkordSkipan = {
                 }
                 else {
                     //flyt alla markeringina so nógv pláss til vinstru sum er neyðugt.
-                    this.markeraOrd(ordId, bokstavId - ((j + this.bokstavamongIMinkadumOrdi) - this.telBokstavirIOrdi(ordId)+1));
+                    this.markeraOrd(ordId, bokstavId - ((j + this.bokstavamongIMinkadumOrdi) - this.telBokstavirIOrdi(ordId)));
                 }
             }
             else if(bokstavId - bakkilongd <= 0) {
