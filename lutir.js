@@ -683,8 +683,8 @@ var akkordSkipan = {
             if(document.getElementById(ordId + "-" + (bokstavId-bakkilongd))) { //Um markeringin heldur seg innanfyri orðið á vinstru síðu.
                 j = bokstavId-bakkilongd;
                 this.markeringByrjan = j;
-                if(document.getElementById(ordId + "-" + (j + this.bokstavamongIMinkadumOrdi-1))) { //Um markeringin heldur seg innanfyri orðið á høgru síðu.
-                    this.markeringEndi = j + this.bokstavamongIMinkadumOrdi - 1;
+                if(document.getElementById(ordId + "-" + (j + this.bokstavamongIMinkadumOrdi-2))) { //Um markeringin heldur seg innanfyri orðið á høgru síðu.
+                    this.markeringEndi = j + this.bokstavamongIMinkadumOrdi - 2;
                     while(i < this.bokstavamongIMinkadumOrdi) {
                         document.getElementById(ordId + "-" + j).setAttribute('class', 'musYvir');
                         i++;
@@ -693,12 +693,17 @@ var akkordSkipan = {
                 }
                 else {
                     //flyt alla markeringina so nógv pláss til vinstru sum er neyðugt.
-                    this.markeraOrd(ordId, bokstavId - ((j + this.bokstavamongIMinkadumOrdi) - this.telBokstavirIOrdi(ordId)));
+                    this.markeraOrd(ordId, bokstavId - ((j + this.bokstavamongIMinkadumOrdi) - this.telBokstavirIOrdi(ordId)+1));
                 }
             }
-            else if(bokstavId - bakkilongd < 0) {
+            else if(bokstavId - bakkilongd <= 0) {
                 //flyt alla markeringina so nógv pláss til høgru sum er neyðugt.
-                this.markeraOrd(ordId, ((bokstavId-bakkilongd)*-1) + bokstavId);
+                if(bokstavId-bakkilongd == 0) {
+                    this.markeraOrd(ordId, ((bokstavId-bakkilongd)*-1) + (bokstavId)+1);
+                }
+                else {
+                    this.markeraOrd(ordId, ((bokstavId-bakkilongd)*-1) + bokstavId);
+                }
             }
         }
         else {
@@ -756,14 +761,13 @@ var akkordSkipan = {
     },
     
     telBokstavirIOrdi: function(ordId) {
-        var bokstavur = 0;
-        var valdiBokstavur = document.getElementById(ordId + "-"+bokstavur);
+        var bokstavur = 1;
         
         while(document.getElementById(ordId + "-" + bokstavur)) {
             bokstavur++;
         }
         
-        return bokstavur;
+        return bokstavur-1;
     },
     
     // 3. Funktiónir til at velja akkord og seta hana inn í tekstin
@@ -839,6 +843,7 @@ var akkordSkipan = {
         
         if(this.ordSumErMarkerad == this.ordSumErMinkad) {
             //um markeringin er minkað
+            alert("Markering: " + this.markeringByrjan + " - " + this.markeringEndi);
         }
         else {
             //Koyr sang í DOM
