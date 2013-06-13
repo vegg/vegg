@@ -604,6 +604,8 @@ var akkordSkipan = {
             millumrum.appendChild(millumrumTekstur);
             
             millumrum.setAttribute("id", "m" + (i+1) + "-" + 1);
+            millumrum.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'m"+(i+1)+"\',1);");
+            millumrum.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'m"+(i+1)+"\',1,1)");
             
             sangPlass.appendChild(millumrum);
             
