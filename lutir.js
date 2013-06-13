@@ -598,6 +598,9 @@ var akkordSkipan = {
                 }
             }
             
+            akkordHaldari.setAttribute("id","akkm"+(i+1));
+            sangPlass.appendChild(akkordHaldari.cloneNode());
+            
             //Ger eitt millumrúm aftaná hvørt orð
             millumrum = document.createElement("span");
             millumrumTekstur = document.createTextNode(" ");
