@@ -601,8 +601,9 @@ var akkordSkipan = {
             //Ger eitt millumrúm aftaná hvørt orð
             millumrum = document.createElement("span");
             millumrumTekstur = document.createTextNode(" ");
-            
             millumrum.appendChild(millumrumTekstur);
+            
+            millumrum.setAttribute("id", "m" + (i+1) + "-" + 1);
             
             sangPlass.appendChild(millumrum);
             
