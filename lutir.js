@@ -667,7 +667,7 @@ var akkordSkipan = {
     // 2. Funktiónir til at markera orð og stilla markeringina
     
     markeraOrd: function(ordId, bokstavId) {
-        var i = 1;
+        var i = 0;
         var j = 1;
         var halvMarkering = Math.floor(this.bokstavamongIMinkadumOrdi / 2);
         var bakkilongd = halvMarkering;
@@ -683,8 +683,8 @@ var akkordSkipan = {
             if(document.getElementById(ordId + "-" + (bokstavId-bakkilongd))) { //Um markeringin heldur seg innanfyri orðið á vinstru síðu.
                 j = bokstavId-bakkilongd;
                 this.markeringByrjan = j;
-                if(document.getElementById(ordId + "-" + (j + this.bokstavamongIMinkadumOrdi-2))) { //Um markeringin heldur seg innanfyri orðið á høgru síðu.
-                    this.markeringEndi = j + this.bokstavamongIMinkadumOrdi - 2;
+                if(document.getElementById(ordId + "-" + (j + this.bokstavamongIMinkadumOrdi-1))) { //Um markeringin heldur seg innanfyri orðið á høgru síðu.
+                    this.markeringEndi = j + this.bokstavamongIMinkadumOrdi - 1;
                     while(i < this.bokstavamongIMinkadumOrdi) {
                         document.getElementById(ordId + "-" + j).setAttribute('class', 'musYvir');
                         i++;
