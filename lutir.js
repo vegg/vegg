@@ -866,9 +866,10 @@ var akkordSkipan = {
         var akkordTekstur;
         var akkord = {};
         
+        //um markeringin er minkað
         if(this.ordSumErMarkerad == this.ordSumErMinkad) {
-            //um markeringin er minkað
-            alert("Markering: " + this.markeringByrjan + " - " + this.markeringEndi);
+            //alert("Markering: " + this.markeringByrjan + " - " + this.markeringEndi);
+            
         }
         else {
             //Koyr sang í DOM
