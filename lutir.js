@@ -606,7 +606,7 @@ var akkordSkipan = {
             millumrumTekstur = document.createTextNode(" ");
             millumrum.appendChild(millumrumTekstur);
             
-            millumrum.setAttribute("id", "m" + (i+1));
+            millumrum.setAttribute("id", "m" + (i+1) + "-" + 1);
             millumrum.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'m"+(i+1)+"\',1);");
             millumrum.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'m"+(i+1)+"\',1,1)");
             
@@ -903,11 +903,11 @@ var akkordSkipan = {
         if(this.ordSumErMarkerad[0] == "m") {
             nyttAkkPlassFyrr = document.createElement("span");
             nyttAkkPlassFyrr.appendChild(document.createTextNode("\u00A0"));
-            nyttAkkPlassFyrr.setAttribute("id", this.ordSumErMarkerad + "f");
+            nyttAkkPlassFyrr.setAttribute("id", this.ordSumErMarkerad + "f" + "-1");
             nyttAkkPlassFyrr.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'"+this.ordSumErMarkerad+"f"+"\',1);");
             nyttAkkPlassFyrr.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'"+this.ordSumErMarkerad+"f"+"\',1,1)");
             
-            $(nyttAkkPlassFyrr).insertBefore('#' + this.ordSumErMarkerad);
+            $(nyttAkkPlassFyrr).insertBefore('#' + this.ordSumErMarkerad + "-1");
             
             nyttAkkPlassEftir = document.createElement("span");
             nyttAkkPlassEftir.appendChild(document.createTextNode("\u00A0"));
@@ -915,7 +915,7 @@ var akkordSkipan = {
             nyttAkkPlassEftir.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'"+this.ordSumErMarkerad+"e"+"\',1);");
             nyttAkkPlassEftir.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'"+this.ordSumErMarkerad+"e"+"\',1,1)");
             
-            $(nyttAkkPlassEftir).insertAfter('#' + this.ordSumErMarkerad);
+            $(nyttAkkPlassEftir).insertAfter('#' + this.ordSumErMarkerad + "-1");
         }
         
         //Koyr akkordir í akkord-objektið
