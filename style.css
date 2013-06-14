@@ -135,6 +135,16 @@ li {
 }
 
 .akkord {
+    color: #000000;
+    background-color: #FFFFFF;
+    position:absolute;
+    top:-1em;
+    z-index:-1;
+}
+
+.akkordMusYvir {
+    color: #FFFFFF;
+    background-color: blue;
     position:absolute;
     top:-1em;
     z-index:-1;

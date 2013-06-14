@@ -693,6 +693,9 @@ var akkordSkipan = {
                     this.markeringEndi = j + this.bokstavamongIMinkadumOrdi - 1;
                     while(i < this.bokstavamongIMinkadumOrdi) {
                         document.getElementById(ordId + "-" + j).setAttribute('class', 'musYvir');
+                        if(document.getElementById("akk" + ordId+"-innan")) {
+                            document.getElementById("akk" + ordId+"-innan").setAttribute('class', 'akkordMusYvir');
+                        }
                         i++;
                         j++;
                     }
@@ -715,6 +718,9 @@ var akkordSkipan = {
         else {
             while(document.getElementById(ordId + "-" + j)) {
                 document.getElementById(ordId + "-" + j).setAttribute('class', 'musYvir');
+                if(document.getElementById("akk" + ordId+"-innan")) {
+                    document.getElementById("akk" + ordId+"-innan").setAttribute('class', 'akkordMusYvir');
+                }
                 j++;
             }
             
@@ -728,6 +734,9 @@ var akkordSkipan = {
         
         while(document.getElementById(ordId + "-" + i)) {
             document.getElementById(ordId + "-" + i).setAttribute('class', 'musIkkiYvir');
+            if(document.getElementById("akk" + ordId+"-innan")) {
+                document.getElementById("akk" + ordId+"-innan").setAttribute('class', 'akkord');
+            }
             i++;
         }
     },
@@ -887,8 +896,8 @@ var akkordSkipan = {
         //Koyr akkordir í DOM
         
         akkordHaldari = document.createElement("span");
-        //akkordHaldari.setAttribute("style","position:absolute;top:-1em;z-index:-1;");
         akkordHaldari.setAttribute("class","akkord");
+        akkordHaldari.setAttribute("id","akk"+this.ordSumErMarkerad+"-innan");
         
         if(akkordir[1] | akkordir[1] == "0") {
             tempAkk = this.akkordir1[akkordir[1]];
@@ -898,8 +907,6 @@ var akkordSkipan = {
         }
         
         akkordHaldari.appendChild(document.createTextNode(tempAkk));
-        
-        
         
         //Um valda plássið er eitt millumrúm
         if(this.ordSumErMarkerad[0] == "m") {
