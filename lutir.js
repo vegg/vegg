@@ -606,7 +606,7 @@ var akkordSkipan = {
             millumrumTekstur = document.createTextNode(" ");
             millumrum.appendChild(millumrumTekstur);
             
-            millumrum.setAttribute("id", "m" + (i+1) + "-" + 1);
+            millumrum.setAttribute("id", "m" + (i+1));
             millumrum.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'m"+(i+1)+"\',1);");
             millumrum.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'m"+(i+1)+"\',1,1)");
             
@@ -881,7 +881,7 @@ var akkordSkipan = {
         var akkordHaldari;
         var tempAkk;
         var akkordTekstur = "";
-        var nyttAkkPlass;
+        var nyttAkkPlassFyrr, nyttAkkPlassEftir;
         
         //Koyr akkordir í DOM
         
@@ -901,10 +901,21 @@ var akkordSkipan = {
         document.getElementById("akk"+this.ordSumErMarkerad).appendChild(akkordHaldari);
         
         if(this.ordSumErMarkerad[0] == "m") {
-            nyttAkkPlass = document.createElement("span");
-            nyttAkkPlass.appendChild(document.createTextNode("\u00A0"));
-            $(nyttAkkPlass).insertBefore('#' + this.ordSumErMarkerad + "-1");
-            $(nyttAkkPlass.cloneNode()).insertAfter('#' + this.ordSumErMarkerad + "-1");
+            nyttAkkPlassFyrr = document.createElement("span");
+            nyttAkkPlassFyrr.appendChild(document.createTextNode("\u00A0"));
+            nyttAkkPlassFyrr.setAttribute("id", this.ordSumErMarkerad + "f");
+            nyttAkkPlassFyrr.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'"+this.ordSumErMarkerad+"f"+"\',1);");
+            nyttAkkPlassFyrr.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'"+this.ordSumErMarkerad+"f"+"\',1,1)");
+            
+            $(nyttAkkPlassFyrr).insertBefore('#' + this.ordSumErMarkerad);
+            
+            nyttAkkPlassEftir = document.createElement("span");
+            nyttAkkPlassEftir.appendChild(document.createTextNode("\u00A0"));
+            nyttAkkPlassEftir.setAttribute("id", this.ordSumErMarkerad + "e" + "-1");
+            nyttAkkPlassEftir.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'"+this.ordSumErMarkerad+"e"+"\',1);");
+            nyttAkkPlassEftir.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'"+this.ordSumErMarkerad+"e"+"\',1,1)");
+            
+            $(nyttAkkPlassEftir).insertAfter('#' + this.ordSumErMarkerad);
         }
         
         //Koyr akkordir í akkord-objektið
