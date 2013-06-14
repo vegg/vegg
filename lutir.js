@@ -879,6 +879,7 @@ var akkordSkipan = {
     
     koyrAkkIdomOgAkkObj : function(akkordir) {
         var akkordHaldari;
+        var nyAkkordHaldariFyrr, nyAkkordHaldariEftir;
         var tempAkk;
         var akkordTekstur = "";
         var nyttAkkPlassFyrr, nyttAkkPlassEftir;
@@ -900,6 +901,7 @@ var akkordSkipan = {
         document.getElementById("akk"+this.ordSumErMarkerad).innerHTML = "";
         document.getElementById("akk"+this.ordSumErMarkerad).appendChild(akkordHaldari);
         
+        //Um valda plássið er eitt millumrúm
         if(this.ordSumErMarkerad[0] == "m") {
             nyttAkkPlassFyrr = document.createElement("span");
             nyttAkkPlassFyrr.appendChild(document.createTextNode("\u00A0"));
@@ -907,7 +909,13 @@ var akkordSkipan = {
             nyttAkkPlassFyrr.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'"+this.ordSumErMarkerad+"f"+"\',1);");
             nyttAkkPlassFyrr.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'"+this.ordSumErMarkerad+"f"+"\',1,1)");
             
-            $(nyttAkkPlassFyrr).insertBefore('#' + this.ordSumErMarkerad + "-1");
+            nyAkkordHaldariFyrr = document.createElement("span");
+            nyAkkordHaldariFyrr.setAttribute("style","position:absolute;");
+            nyAkkordHaldariFyrr.setAttribute("id", "akk"+this.ordSumErMarkerad+"f");
+            
+            $(nyAkkordHaldariFyrr).insertBefore('#akk' + this.ordSumErMarkerad);
+            $(nyttAkkPlassFyrr).insertBefore('#akk' + this.ordSumErMarkerad);
+            
             
             nyttAkkPlassEftir = document.createElement("span");
             nyttAkkPlassEftir.appendChild(document.createTextNode("\u00A0"));
@@ -915,7 +923,12 @@ var akkordSkipan = {
             nyttAkkPlassEftir.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'"+this.ordSumErMarkerad+"e"+"\',1);");
             nyttAkkPlassEftir.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'"+this.ordSumErMarkerad+"e"+"\',1,1)");
             
+            nyAkkordHaldariEftir = document.createElement("span");
+            nyAkkordHaldariEftir.setAttribute("style","position:absolute;");
+            nyAkkordHaldariEftir.setAttribute("id", "akk"+this.ordSumErMarkerad+"e");
+            
             $(nyttAkkPlassEftir).insertAfter('#' + this.ordSumErMarkerad + "-1");
+            $(nyAkkordHaldariEftir).insertAfter('#' + this.ordSumErMarkerad + "-1");
         }
         
         //Koyr akkordir í akkord-objektið
