@@ -887,7 +887,8 @@ var akkordSkipan = {
         //Koyr akkordir í DOM
         
         akkordHaldari = document.createElement("span");
-        akkordHaldari.setAttribute("style","position:absolute;top:-1em;z-index:-1;");
+        //akkordHaldari.setAttribute("style","position:absolute;top:-1em;z-index:-1;");
+        akkordHaldari.setAttribute("class","akkord");
         
         if(akkordir[1] | akkordir[1] == "0") {
             tempAkk = this.akkordir1[akkordir[1]];

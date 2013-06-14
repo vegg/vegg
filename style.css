@@ -134,6 +134,12 @@ li {
     color: #FFFFFF;
 }
 
+.akkord {
+    position:absolute;
+    top:-1em;
+    z-index:-1;
+}
+
 .musIkkiYvir .musYvir {
     z-index: 0;
 }
