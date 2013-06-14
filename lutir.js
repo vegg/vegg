@@ -881,6 +881,7 @@ var akkordSkipan = {
         var akkordHaldari;
         var tempAkk;
         var akkordTekstur = "";
+        var nyttAkkPlass;
         
         //Koyr akkordir í DOM
         
@@ -898,6 +899,13 @@ var akkordSkipan = {
         
         document.getElementById("akk"+this.ordSumErMarkerad).innerHTML = "";
         document.getElementById("akk"+this.ordSumErMarkerad).appendChild(akkordHaldari);
+        
+        if(this.ordSumErMarkerad[0] == "m") {
+            nyttAkkPlass = document.createElement("span");
+            nyttAkkPlass.appendChild(document.createTextNode("\u00A0"));
+            $(nyttAkkPlass).insertBefore('#' + this.ordSumErMarkerad + "-1");
+            $(nyttAkkPlass.cloneNode()).insertAfter('#' + this.ordSumErMarkerad + "-1");
+        }
         
         //Koyr akkordir í akkord-objektið
         
