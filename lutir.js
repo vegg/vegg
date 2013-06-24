@@ -631,14 +631,32 @@ var akkordSkipan = {
         if(skra.songKeeper[UISangId] && skra.songKeeper[UISangId].sang.sang_akkordir[versId]) {
             $.each(skra.songKeeper[UISangId].sang.sang_akkordir[versId], function(index,value) {
                 akkordSkipan.ordSumErMarkerad = index;
-                /*if(value[1] + "") {
-                    akkordSkipan.velAkkord(value[1]+"", 1);
-                }
-                if(value[2] + "") {
-                    akkordSkipan.velAkkord(value[2]+"", 2);
-                }*/
                 
-                akkordSkipan.koyrAkkIdomOgAkkObj(value);
+                
+                if(value['s'] && value['s'] != "0") {
+                    akkordSkipan.ordSumErMinkad = index;
+                    
+                    //Ger placeholders
+                    if(!(akkordSkipan.akkordirISangi[versId])) {
+                        akkordSkipan.akkordirISangi[versId] = {"zyz":"zyz"};
+                    }
+                    if(!(akkordSkipan.akkordirISangi[versId][akkordSkipan.ordSumErMinkad+""])) {
+                        akkordSkipan.akkordirISangi[versId][akkordSkipan.ordSumErMinkad+""] = {};
+                    }
+                    
+                    //Deil orðið sundur
+                    akkordSkipan.akkordirISangi[versId][akkordSkipan.ordSumErMinkad+""]["s"] = value['s'];
+                    akkordSkipan.deilOrdSundur();
+                    
+                    //Rudda upp
+                    if(akkordSkipan.akkordirISangi[versId] && akkordSkipan.akkordirISangi[versId][1] && akkordSkipan.akkordirISangi[versId]["zyz"] == "zyz") {
+                        delete akkordSkipan.akkordirISangi[versId]["zyz"];
+                    }
+                    akkordSkipan.ordSumErMinkad = 0;
+                }
+                else {
+                    akkordSkipan.koyrAkkIdomOgAkkObj(value);
+                }
             });
             akkordSkipan.ordSumErMarkerad = 0;
         }
@@ -667,7 +685,7 @@ var akkordSkipan = {
         document.getElementById("jFylg").style.top = ovara + "px";
         document.getElementById("jFylg").style.left = vinstra + "px";
         document.getElementById("jFylg").innerHTML =
-            '<a href="#" onclick="akkordSkipan.vidkaMarkering('+ordId+', '+bokstavId+')" ><img src="grafikkur/pluss.png" style="z-index:2"></a><a href="#" onclick="akkordSkipan.minkaMarkering('+ordId+','+bokstavId+')"><img src="grafikkur/minus.png" style="z-index:2"></a>';
+            '<a href="#" onclick="akkordSkipan.vidkaMarkering(\''+ordId+'\', '+bokstavId+')" ><img src="grafikkur/pluss.png" style="z-index:2"></a><a href="#" onclick="akkordSkipan.minkaMarkering(\''+ordId+'\','+bokstavId+')"><img src="grafikkur/minus.png" style="z-index:2"></a>';
     },
 
     // 2. Funktiónir til at markera orð og stilla markeringina
@@ -865,22 +883,70 @@ var akkordSkipan = {
         var akkordHaldari;
         var akkordTekstur;
         var akkord = {};
+        var tempAkkord = {};
+        var i;
+        var tempP;
         
-        //um markeringin er minkað
-        if(this.ordSumErMarkerad == this.ordSumErMinkad) {
-            //alert("Markering: " + this.markeringByrjan + " - " + this.markeringEndi);
-            
+        document.getElementById("jFylg").innerHTML = "";
+        
+        if(akkordMenu == 1) {
+            this.akkordUndirGerd = {};
         }
-        else {
-            //Koyr sang í DOM
-            document.getElementById("jFylg").innerHTML = "";
-            
-            if(akkordMenu == 1) {
-                this.akkordUndirGerd = {};
+        
+        this.akkordUndirGerd[akkordMenu] = akkordNr;
+        
+        if(this.ordSumErMarkerad == this.ordSumErMinkad) {
+            if(!(this.akkordirISangi[this.vers])) {
+                this.akkordirISangi[this.vers] = {"zyz":"zyz"};
             }
             
-            this.akkordUndirGerd[akkordMenu] = akkordNr;
-            
+            //Okkurt finst vinstrumegin markeringina
+            if(document.getElementById(this.ordSumErMinkad + "-" + (this.markeringByrjan-1))) {
+                if(!(this.akkordirISangi[this.vers][this.ordSumErMinkad+""])) {
+                    this.akkordirISangi[this.vers][this.ordSumErMinkad+""] = {};
+                }
+                this.akkordirISangi[this.vers][this.ordSumErMinkad+""]["s"] = this.markeringByrjan;
+                
+                //Um ein akkord longu er á orðinum.
+                if(this.akkordirISangi[this.vers][this.ordSumErMinkad+""][1] || this.akkordirISangi[this.vers][this.ordSumErMinkad+""][1] == "0") {
+                    //Koyr orðið sundur og koyr nýggju akkordina á seinna partin av orðinum.
+                    this.deilOrdSundur();
+                    this.ordSumErMarkerad = "e"+this.ordSumErMarkerad;
+                    this.koyrAkkIdomOgAkkObj(this.akkordUndirGerd);
+                    
+                    //Flyt gomlu akkordina til fyrra partin av orðinum.
+                    this.ordSumErMarkerad = "f"+this.ordSumErMarkerad.substring(1,this.ordSumErMarkerad.length);
+                    
+                    tempAkkord[1] = this.akkordirISangi[this.vers][this.ordSumErMinkad+""][1];
+                    if(this.akkordirISangi[this.vers][this.ordSumErMinkad+""][2] || this.akkordirISangi[this.vers][this.ordSumErMinkad+""][2] == "0") {
+                        tempAkkord[2] = this.akkordirISangi[this.vers][this.ordSumErMinkad+""][2];
+                    }
+                    
+                    this.koyrAkkIdomOgAkkObj(tempAkkord);
+                    
+                    delete this.akkordirISangi[this.vers][this.ordSumErMinkad+""][1];
+                    if(this.akkordirISangi[this.vers][this.ordSumErMinkad+""][2] || this.akkordirISangi[this.vers][this.ordSumErMinkad+""][2] == "0") {
+                        delete this.akkordirISangi[this.vers][this.ordSumErMinkad+""][2];
+                    }
+                }
+                else {
+                    this.deilOrdSundur();
+                    this.ordSumErMarkerad = "e"+this.ordSumErMarkerad;
+                    this.koyrAkkIdomOgAkkObj(this.akkordUndirGerd);
+                }
+                
+            }
+            else {
+                this.koyrAkkIdomOgAkkObj(this.akkordUndirGerd);
+                this.innsetAkkordVeljara(this.ordSumErMarkerad, this.bokstavurSumErMarkeradur, 2);
+            }
+        
+            //Rudda upp
+            if(this.akkordirISangi[this.vers] && this.akkordirISangi[this.vers][1] && this.akkordirISangi[this.vers]["zyz"] == "zyz") {
+                delete this.akkordirISangi[this.vers]["zyz"];
+            }
+        }
+        else {
             this.koyrAkkIdomOgAkkObj(this.akkordUndirGerd);
             
             this.innsetAkkordVeljara(this.ordSumErMarkerad, this.bokstavurSumErMarkeradur, 2);
@@ -893,9 +959,24 @@ var akkordSkipan = {
         var tempAkk;
         var akkordTekstur = "";
         var nyttAkkPlassFyrr, nyttAkkPlassEftir;
+        var i = 1;
+        var p=-1,q=-1;
+        var fOrd=1,aOrd=1,eOrd=1;
+        var fyrraMillumrum, seinnaMillumrum;
+        var fyrrimAkkordHaldari, seinnimAkkordHaldari;
+        var fyrriAkkordhaldari, seinniAkkordHaldari;
+        var prefix;
+        var akkPrefix = "";
+        var eAkkord;
+        
+        //Koyr akkordir í akkord-objektið
+        if(!this.akkordirISangi[this.vers]) {
+            this.akkordirISangi[this.vers] = {};
+        }
+        
+        this.akkordirISangi[this.vers][this.ordSumErMarkerad+""] = akkordir;
         
         //Koyr akkordir í DOM
-        
         akkordHaldari = document.createElement("span");
         akkordHaldari.setAttribute("class","akkord");
         akkordHaldari.setAttribute("id","akk"+this.ordSumErMarkerad+"-innan");
@@ -928,8 +1009,6 @@ var akkordSkipan = {
                 $(nyAkkordHaldariFyrr).insertBefore('#akk' + this.ordSumErMarkerad);
                 $(nyttAkkPlassFyrr).insertBefore('#akk' + this.ordSumErMarkerad);
                 
-                
-                
                 nyttAkkPlassEftir = document.createElement("span");
                 nyttAkkPlassEftir.appendChild(document.createTextNode("\u00A0"));
                 nyttAkkPlassEftir.setAttribute("id", this.ordSumErMarkerad + "e" + "-1");
@@ -950,14 +1029,68 @@ var akkordSkipan = {
         document.getElementById("akk"+this.ordSumErMarkerad).innerHTML = "";
         document.getElementById("akk"+this.ordSumErMarkerad).appendChild(akkordHaldari);
         
-        //Koyr akkordir í akkord-objektið
+    },
+    
+    deilOrdSundur : function() {
+        var s;
+        var fOrd=1,aOrd=1,eOrd=1;
+        var millumrum;
+        var mAkkordHaldari;
+        var prefix;
+        var i = 1;
         
-        if(!this.akkordirISangi[this.vers]) {
-            this.akkordirISangi[this.vers] = {};
+        if(this.akkordirISangi[this.vers] && this.akkordirISangi[this.vers][this.ordSumErMarkerad+""] && this.akkordirISangi[this.vers][this.ordSumErMarkerad+""]['s']) {
+            s = this.akkordirISangi[this.vers][this.ordSumErMarkerad+""]['s'];
+            
+            while(document.getElementById(this.ordSumErMarkerad + "-" + i)) {
+            
+                //Fyrsta orðið aftaná uppdeilingina er prefixað við f
+                if(i < s) {
+                    document.getElementById(this.ordSumErMinkad + "-" + i).setAttribute("onmouseover", "akkordSkipan.markeraOrd('f"+ this.ordSumErMinkad +"', "+fOrd+"); akkordSkipan.innsetMinkaraOgStorrara('f"+ this.ordSumErMinkad +"', "+fOrd+")");
+                    document.getElementById(this.ordSumErMinkad + "-" + i).setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara('f"+this.ordSumErMinkad+"', "+fOrd+",1)");
+                    document.getElementById(this.ordSumErMinkad + "-" + i).setAttribute("id", "f"+this.ordSumErMinkad + "-" + fOrd);
+                    fOrd++;
+                }
+                //Annað orðið er prefixað við e
+                else if(i >= s) {
+                    document.getElementById(this.ordSumErMinkad + "-" + i).setAttribute("onmouseover", "akkordSkipan.markeraOrd('e"+ this.ordSumErMinkad +"', "+eOrd+"); akkordSkipan.innsetMinkaraOgStorrara('e"+ this.ordSumErMinkad +"', "+eOrd+")");
+                    document.getElementById(this.ordSumErMinkad + "-" + i).setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara('e"+this.ordSumErMinkad+"', "+eOrd+",1)");
+                    document.getElementById(this.ordSumErMinkad + "-" + i).setAttribute("id", "e"+this.ordSumErMinkad + "-" + eOrd);
+                    eOrd++;
+                }
+                i++;
+            }
+            
+            prefix = "e";
+            
+            millumrum = document.createElement("span");
+            millumrum.appendChild(document.createTextNode("\u00A0"));
+            millumrum.setAttribute("id", "m" +prefix+ this.ordSumErMarkerad + "-1");
+            millumrum.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'m"+prefix+this.ordSumErMarkerad+"\',1);");
+            millumrum.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'m"+prefix+this.ordSumErMarkerad+"\',1,1)");
+            
+            mAkkordHaldari = document.createElement("span");
+            mAkkordHaldari.setAttribute("style","position:absolute;");
+            mAkkordHaldari.setAttribute("id", "akkm"+prefix+this.ordSumErMarkerad);
+            
+            $(mAkkordHaldari).insertBefore("#"+prefix + this.ordSumErMarkerad + '-1');
+            $(millumrum).insertBefore("#"+prefix + this.ordSumErMarkerad + '-1');
+            
+            //nýggan akkordhaldara til nýggja orðið
+            
+            //rætta fyrsta akkordhaldaranavnið
+            document.getElementById("akk"+this.ordSumErMarkerad).setAttribute("id", "akkf"+this.ordSumErMarkerad);
+            
+            //Og ger eitt nýtt pláss
+            fyrriAkkordhaldari = document.createElement("span");
+            fyrriAkkordhaldari.setAttribute("style","position:absolute;");
+            fyrriAkkordhaldari.setAttribute("id", "akk"+prefix+this.ordSumErMarkerad);
+            $(fyrriAkkordhaldari).insertBefore("#" + prefix + this.ordSumErMarkerad + '-1');
+            
+            //this.ordSumErMinkad = null;
+            this.markeringByrjan = null;
+            this.markeringEndi = null;
         }
-        
-        this.akkordirISangi[this.vers][this.ordSumErMarkerad+""] = akkordir;
-
     },
     
     // 4. Aðrar funktiónir
