@@ -7,6 +7,7 @@
     
     <script src="jquery.min.js"></script>
     <script type="text/javascript" src="lutir.js"></script>
+    <script type="text/javascript" src="akkordskipan.js"></script>
     
     <meta charset="utf-8" />
     <title>Veggur 0.1</title>
