@@ -602,8 +602,36 @@ var akkordSkipan = {
         //Koyr akkord í akkordhaldara.
         document.getElementById("akk"+this.ordSumErMarkerad+'-'+this.markeringByrjan).innerHTML = "";
         document.getElementById("akk"+this.ordSumErMarkerad+'-'+this.markeringByrjan).appendChild(akkordHaldari);
+        
+        this.flytTekstFyriAkk(tempAkk);
     },
 
+    flytTekstFyriAkk : function(akkord) {
+        var tekinIAkk;
+        var i;
+        var valdiBokst;
+        
+        tekinIAkk = akkord.length;
+        
+        valdiBokst = $('#'+this.ordSumErMarkerad+"-"+this.bokstavurSumErMarkeradur);
+        
+        for(i=0; i<tekinIAkk; i++) {
+            valdiBokst = $(valdiBokst).next();
+            if(valdiBokst[0].outerHTML === "<br>") {
+                break;
+            }
+            if(valdiBokst[0].childElementCount > 0) {
+                break;
+            }
+        }
+        
+        if((i*1.5)<tekinIAkk) {
+            document.getElementById(this.ordSumErMarkerad+"-"+this.bokstavurSumErMarkeradur).setAttribute("style", "margin-right:"+(tekinIAkk/2)+"em");
+        }
+        else {
+            document.getElementById(this.ordSumErMarkerad+"-"+this.bokstavurSumErMarkeradur).removeAttribute("style");
+        }
+    },
     
     strikaAkkord : function(markeraOrd, markeradurbokstv) {
         var stringMarkerad = this.ordSumErMarkerad + "";
