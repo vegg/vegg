@@ -128,48 +128,6 @@ var akkordSkipan = {
                 
                 //millumrúmsakkordir
                 if(index[0] === 'm') {
-                    /*
-                    //finn størsta 'e'
-                    //vend leiðina á listanum hin vegin so vit byrja frá minsta e og ikki størsta. Awkward awkward...
-                    $.each(value, function(key, val) {
-                        if(typeof val['e'] !== "undefined" && val['e'] > e) {
-                            e = val['e'];
-                        }
-                        if(index > storstaBokstId) {
-                            storstaBokstId = index;
-                        }
-                    });
-                    
-                    //set m-akkordirnar inn eftir raðfylgjuni hjá linkaða listanum
-                    while(typeof value[e] !== "undefined") {
-                        //ger eitt nýtt objekt fyri hvørt m.
-                        akkord = {};
-                        
-                        akkord[1] = value[e][1];
-                        if(typeof value[e][2] !== "undefined") {
-                            akkord[2] = value[e][2];
-                        }
-                        if(typeof value[e]['e'] !== "undefined") {
-                            akkord['e'] = value[e]['e'];
-                        }
-                        akkordSkipan.ordSumErMarkerad = index;
-                        if(typeof akkordSkipan.akkordirISangi[versId] === "undefined" ||
-                           typeof akkordSkipan.akkordirISangi[versId][index] === "undefined") {
-                            akkordSkipan.markeringByrjan = 1;
-                        }
-                        else {
-                            akkordSkipan.markeringByrjan = akkordSkipan.markeringByrjan + 2;
-                        }
-                        
-                        akkordSkipan.bokstavurSumErMarkeradur = akkordSkipan.markeringByrjan;
-                        akkordSkipan.koyrAkkIdomOgAkkObj(akkord);
-                        akkordSkipan.gerMillumrumGrannar();
-                        
-                        e = value[e]['e'];
-                    
-                    }
-                    */
-                    
                     //Finn akkord sum ongin onnur akkord peikar á
                     $.each(value, function(key, val) {
                         peikarA = false;
@@ -487,33 +445,6 @@ var akkordSkipan = {
             if(!this.akkordirISangi[this.vers] || !this.akkordirISangi[this.vers][this.ordSumErMarkerad+""] || !this.akkordirISangi[this.vers][this.ordSumErMarkerad+""][this.bokstavurSumErMarkeradur+""]) {
                 this.koyrAkkIdomOgAkkObj(this.akkordUndirGerd);
                 
-                
-                //Ger broytingar í akkord objektinum soleiðis at ein linkaður listi verður bygdur
-                /*$.each(this.akkordirISangi[this.vers][this.ordSumErMarkerad+""], function(key, val) {
-                    //Um tað finst nøkur akkord til vinstru, sig at hendan akkordin er beint 'e'ftir hana, tískil 'e'
-                    if(val && val['h'] == akkordSkipan.bokstavurSumErMarkeradur+"") {
-                        akkordTilVinstru = true;
-                        
-                        //Um tað longu er ein akkord sum er eftir vinstru akkordina, být so um pláss við henni.
-                        $.each(akkordSkipan.akkordirISangi[akkordSkipan.vers][akkordSkipan.ordSumErMarkerad+""], function(k, v) {
-                            if(v['e'] == key) {
-                                v['e'] = akkordSkipan.bokstavurSumErMarkeradur;
-                            }
-                        });
-                        
-                        akkordSkipan.akkordirISangi[akkordSkipan.vers][akkordSkipan.ordSumErMarkerad+""][akkordSkipan.bokstavurSumErMarkeradur+""]['e'] = key;
-                    }
-                });
-                
-                if(!akkordTilVinstru) {
-                    //Finn akkordina sum ikki hevur definerað e
-                    $.each(akkordSkipan.akkordirISangi[akkordSkipan.vers][akkordSkipan.ordSumErMarkerad+""], function(lykil, virdi) {
-                        if(virdi && (!virdi['e'] && lykil != akkordSkipan.bokstavurSumErMarkeradur)) {
-                            virdi['e'] = akkordSkipan.bokstavurSumErMarkeradur;
-                        }
-                    });
-                }*/
-                
                 //Ger broytingar í akkord objektinum soleiðis at ein linkaður listi verður bygdur
                 
                 //Er ein akkord á vinstru síðu?
@@ -681,41 +612,6 @@ var akkordSkipan = {
         var akkordTilHogru;
         
         if(prefix === "m") {
-            
-            //viðlíkahaldsarbeiði fyri at fáa linkaða listan at hanga saman
-            /*
-            $.each(this.akkordirISangi[this.vers][markeraOrd], function(lykil, virdi) {
-                talAvAkkordum++;
-                if(virdi['e'] === markeradurbokstv) {
-                    peikarAHesa = lykil;
-                }
-            });
-            
-            if(talAvAkkordum === 1) {
-                
-            }
-            else if(talAvAkkordum > 1) {
-                //um ein akkord er til vinstru
-                if(typeof this.akkordirISangi[this.vers][markeraOrd][markeradurbokstv]['e'] !== "undefined") {
-                    //um ein akkord eisini er til høgru
-                    if(peikarAHesa > -1) {
-                        this.akkordirISangi[this.vers][markeraOrd][peikarAHesa]['e'] = this.akkordirISangi[this.vers][markeraOrd][markeradurbokstv]['e'];
-                    }
-                    //um ongin akkord er til høgru
-                    else {
-                        
-                    }
-                }
-                //um ongin akkord er til vinstru
-                else {
-                    if(peikarAHesa > -1) {
-                        delete this.akkordirISangi[this.vers][markeraOrd][peikarAHesa]['e'];
-                    }
-                }
-            }
-            
-            */
-            
             //viðlíkahaldsarbeiði fyri at fáa linkaða listan at hanga saman
             
             //kanna akkordlistan í hesum orðinum.
@@ -742,7 +638,6 @@ var akkordSkipan = {
                     }
                 }
             }
-            
             
             //sletta barnið til høgru
             document.getElementById("sangPlass").removeChild(document.getElementById(markeraOrd+"-"+this.akkordirISangi[this.vers][markeraOrd][markeradurbokstv]['h']));
