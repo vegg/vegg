@@ -176,8 +176,13 @@ var akkordSkipan = {
                 //vanligar akkordir
                 else {
                     $.each(value, function(key, val) {
+                        akkordSkipan.bokstavurSumErMarkeradur = key;
                         akkordSkipan.markeringByrjan = key;
-                        akkordSkipan.koyrAkkIdomOgAkkObj();
+                        akkordSkipan.velAkkord(val[1],1);
+                        if(typeof val[2] !== "undefined") {
+                            akkordSkipan.velAkkord(val[2],2);
+                        }
+                        
                         akkordSkipan.markeringByrjan = null;
                     });
                 }
@@ -281,7 +286,6 @@ var akkordSkipan = {
     
     strikaMarkering : function(ordId) {
         var i = 1;
-        
         while(document.getElementById(ordId + "-" + i)) {
             document.getElementById(ordId + "-" + i).setAttribute('class', 'musIkkiYvir');
             if(document.getElementById("akk" + ordId+"-"+this.bokstavurSumErMarkeradur+"-innan")) {
