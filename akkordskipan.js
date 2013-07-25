@@ -559,6 +559,8 @@ var akkordSkipan = {
         var prefix;
         var akkPrefix = "";
         var eAkkord;
+        var bokst;
+        var vinstraAkk;
         
         //bygg akkord-objekt upp
         if(!this.akkordirISangi[this.vers]) {
@@ -603,17 +605,44 @@ var akkordSkipan = {
         document.getElementById("akk"+this.ordSumErMarkerad+'-'+this.markeringByrjan).innerHTML = "";
         document.getElementById("akk"+this.ordSumErMarkerad+'-'+this.markeringByrjan).appendChild(akkordHaldari);
         
-        this.flytTekstFyriAkk(tempAkk);
+        //Tilpassa akkordirnar so tær ikki verða viklaðar saman
+        this.flytTekstFyriAkk(tempAkk,this.ordSumErMarkerad, this.markeringByrjan);
+        
+        bokst = $('#'+this.ordSumErMarkerad+"-"+this.markeringByrjan);
+        bokst = $(bokst).prev();
+        do {
+            bokst = $(bokst).prev();
+        } while(bokst.attr("id") !== "jFylg" && bokst[0].outerHTML !== "<br>" && bokst.attr("id").substring(0,3) !== "akk");
+        
+        
+        vinstraAkk = bokst.attr("id");
+        
+        this.flytTekstFyriAkk("", "", "", vinstraAkk);
     },
 
-    flytTekstFyriAkk : function(akkord) {
+    flytTekstFyriAkk : function(akkord, ord, bokst, akkString) {
         var tekinIAkk;
         var i;
         var valdiBokst;
+        var akkPettir;
+        var ordOgBokst;
+        var akkordFunnin = false;
+        
+        if(typeof akkString !== "undefined" && akkString !== "jFylg") {
+            akkPettir = akkString.split("akk");
+            ordOgBokst = akkPettir[1].split("-");
+            
+            ord = ordOgBokst[0];
+            bokst = ordOgBokst[1];
+            akkord = document.getElementById(akkString + "-innan").innerHTML;
+            
+            this.ordSumErMarkerad = ord;
+            this.bokstavurSumErMarkeradur = bokst;
+        }
         
         tekinIAkk = akkord.length;
         
-        valdiBokst = $('#'+this.ordSumErMarkerad+"-"+this.bokstavurSumErMarkeradur);
+        valdiBokst = $('#'+ord+"-"+bokst);
         
         for(i=0; i<tekinIAkk; i++) {
             valdiBokst = $(valdiBokst).next();
@@ -621,10 +650,11 @@ var akkordSkipan = {
                 break;
             }
             if(valdiBokst[0].childElementCount > 0) {
+                akkordFunnin = true;
                 break;
             }
         }
-        
+        //leggi helvtina aftrat fyri at gera i meira følsamt
         if((i*1.5)<tekinIAkk) {
             document.getElementById(this.ordSumErMarkerad+"-"+this.bokstavurSumErMarkeradur).setAttribute("style", "margin-right:"+(tekinIAkk/2)+"em");
         }
