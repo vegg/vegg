@@ -143,7 +143,7 @@ var akkordSkipan = {
                         }
                         return peikarA;
                     });
-                    
+                    talAvAkk = 0;
                     $.each(value, function(k, v) {
                         talAvAkk++;
                     });
@@ -158,7 +158,7 @@ var akkordSkipan = {
                     }
                     
                     if(talAvAkk > 1) {
-                        while(typeof value[n]['n'] !== "undefined") {
+                        while(typeof value[n] !== "undefined" && typeof value[n]['n'] !== "undefined") {
                             akkordSkipan.bokstavurSumErMarkeradur = akkordSkipan.bokstavurSumErMarkeradur + 2;
                             akkordSkipan.markeringByrjan = akkordSkipan.bokstavurSumErMarkeradur;
                             akkordSkipan.velAkkord(value[n][1],1);
