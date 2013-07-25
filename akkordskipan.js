@@ -121,6 +121,7 @@ var akkordSkipan = {
         var storstaBokstId = 0;
         var fyrstaAkkord;
         var peikarA = false;
+        var talAvAkk = 0;
         
         if(skra.songKeeper[UISangId] && skra.songKeeper[UISangId].sang.sang_akkordir[versId]) {
             $.each(skra.songKeeper[UISangId].sang.sang_akkordir[versId], function(index,value) {
@@ -143,6 +144,10 @@ var akkordSkipan = {
                         return peikarA;
                     });
                     
+                    $.each(value, function(k, v) {
+                        talAvAkk++;
+                    });
+                    
                     //Far ígjøgnum linkaða listan og koyr akkordir í skipanina
                     akkordSkipan.ordSumErMarkerad = index;
                     akkordSkipan.bokstavurSumErMarkeradur = 1;
@@ -152,7 +157,19 @@ var akkordSkipan = {
                         akkordSkipan.velAkkord(value[fyrstaAkkord][2],2);
                     }
                     
-                    while(typeof value[n]['n'] !== "undefined") {
+                    if(talAvAkk > 1) {
+                        while(typeof value[n]['n'] !== "undefined") {
+                            akkordSkipan.bokstavurSumErMarkeradur = akkordSkipan.bokstavurSumErMarkeradur + 2;
+                            akkordSkipan.markeringByrjan = akkordSkipan.bokstavurSumErMarkeradur;
+                            akkordSkipan.velAkkord(value[n][1],1);
+                            
+                            if(typeof value[n][2] !== "undefined") {
+                                akkordSkipan.velAkkord(value[n][2],2);
+                            }
+                            
+                            n = value[n]['n'];
+                        }
+                        //Síðsta virði kemur ikki við í loopið
                         akkordSkipan.bokstavurSumErMarkeradur = akkordSkipan.bokstavurSumErMarkeradur + 2;
                         akkordSkipan.markeringByrjan = akkordSkipan.bokstavurSumErMarkeradur;
                         akkordSkipan.velAkkord(value[n][1],1);
@@ -160,16 +177,6 @@ var akkordSkipan = {
                         if(typeof value[n][2] !== "undefined") {
                             akkordSkipan.velAkkord(value[n][2],2);
                         }
-                        
-                        n = value[n]['n'];
-                    }
-                    //Síðsta virði kemur ikki við í loopið
-                    akkordSkipan.bokstavurSumErMarkeradur = akkordSkipan.bokstavurSumErMarkeradur + 2;
-                    akkordSkipan.markeringByrjan = akkordSkipan.bokstavurSumErMarkeradur;
-                    akkordSkipan.velAkkord(value[n][1],1);
-                    
-                    if(typeof value[n][2] !== "undefined") {
-                        akkordSkipan.velAkkord(value[n][2],2);
                     }
                 }
                 
@@ -461,7 +468,7 @@ var akkordSkipan = {
                 });
                 
                 //Er ein akkord á høgru síðu?
-                if($('#'+markOrd+"-"+markBokstv).next().attr('id').substring(0,3) === 'akk') {
+                if($('#'+markOrd+"-"+markBokstv).next()[0].outerHTML !== "<br>" && $('#'+markOrd+"-"+markBokstv).next().attr('id').substring(0,3) === 'akk') {
                     akkordNavn = $('#'+markOrd+"-"+markBokstv).next().attr('id').split('-');
                     
                     akkordTilHogru = akkordNavn[1];
