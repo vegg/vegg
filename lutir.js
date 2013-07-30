@@ -348,13 +348,13 @@ var framsyning = {
     },
     
     koyrIAkkFeed : function(sangNr, versNr) {
-        //var sang = skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+versNr];
         var sang = {};
         var akkordir = skra.songKeeper[sangNr]['sang']['sang_akkordir'];
         
         $.each(akkordir, function(index, value) {
-            //sang[index] = akkordir[index];
-            sang[index] = skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+index];
+            if(typeof value !== "undefined") {
+                sang[index] = skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+index];
+            }
         });
         
         akkordir = JSON.stringify(akkordir);
@@ -451,7 +451,7 @@ var sangInnskrivari = {
                     ')">+</a> - <a id="vers_deil'+i+'" href="#" onclick="undansyning.sundurDeilVers('+i+
                     ')" onmouseover="undansyning.broytBakgrundsLitAEinumBroytiTekstkassa(\'true\',\'ns_vers'+i+
                     '\')" onmouseout="undansyning.broytBakgrundsLitAEinumBroytiTekstkassa(\'false\',\'ns_vers'+i+'\')"><></a> '+
-                    '<a href="#" onclick="akkordSkipan.innVidSangi(\''+sangNr+'\',\''+i+'\')" onmouseover="undansyning.broytBakgrundsLitAEinumBroytiTekstkassa(\'true\',\'ns_vers'+i+
+                    '<a href="#" onclick="akkordSkipan.tendra(\'skra\',\''+sangNr+'\',\''+i+'\')" onmouseover="undansyning.broytBakgrundsLitAEinumBroytiTekstkassa(\'true\',\'ns_vers'+i+
                     '\')" onmouseout="undansyning.broytBakgrundsLitAEinumBroytiTekstkassa(\'false\',\'ns_vers'+i+'\')">Akkordir</a>' +
             '</li>';
             

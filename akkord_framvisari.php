@@ -3,17 +3,31 @@
 <head>
     <title>Akkordframs&yacute;ning</title>
     <script src="jquery.min.js"></script>
+    <script src="akkordskipan.js"></script>
+    
+    
+    <meta charset="utf-8" />
     <style>
         body {
             background-color: #000000;
             color: #ffffff;
             font-size: 1.5em;
         }
+        
+        .akkord {
+            position:absolute;
+            top:-1em;
+            z-index:-1;
+        }
     </style>
 </head>
 <body>
     <script>
     
+    $(document).ready(function(){
+        akkordSkipan.tendra("akkfeed");
+    });
+    /*
     //http://techoctave.com/c7/posts/60-simple-long-polling-example-with-javascript-and-jquery
         $(document).ready(function(){
             framvisari_akkordSkipan.forceHeinta();
@@ -213,7 +227,10 @@
                 framvisari_akkordSkipan.forceHeinta();
             }
         }
-        
+    */
+    
+    
+    
     </script>
     
     <p id="sang"></p>
