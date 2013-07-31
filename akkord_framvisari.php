@@ -234,8 +234,8 @@
     </script>
     
     <p id="sang"></p>
-    <p>Transponera: <a href="#" onclick="framvisari_akkordSkipan.transponera('+')">+</a>
-    <a href="#" onclick="framvisari_akkordSkipan.transponera('-')">-</a>
-    <a href="#" onclick="framvisari_akkordSkipan.nullstillaTransponering()">0</a></p>
+    <p>Transponera: <a href="#" onclick="akkordSkipan.transponera('upp')">+</a>
+    <a href="#" onclick="akkordSkipan.transponera('nidur')">-</a>
+    <a href="#" onclick="akkordSkipan.transponera('nullstilla')">0</a></p>
 </body>
 </html>

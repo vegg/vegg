@@ -16,16 +16,18 @@ var akkordSkipan = {
     sangTekstKelda : undefined,
     akkordKelda : undefined,
     kelduSlag : "",
+    transponering : 144,
     
     tendra : function(kelduSlag, UISangId, versId) {
         //Heintar frá skra objektinum í lutir.js
         if(kelduSlag === "skra") {
+            this.vers = versId;
             this.sangTekstKelda = skra.songKeeper[UISangId].sang.sang_innihald['vers'+versId];
             if(skra.songKeeper[UISangId] !== "undefined" && skra.songKeeper[UISangId].sang.sang_akkordir[versId] !== "undefined") {
                 this.akkordKelda = skra.songKeeper[UISangId].sang.sang_akkordir[versId];
             }
             
-            kelduSlag = "skra";
+            this.kelduSlag = "skra";
             
             this.innVidSangi(UISangId, versId);
         }
@@ -43,9 +45,11 @@ var akkordSkipan = {
                 if(data != "") {
                     document.getElementById("sang").innerHTML = "";
                     $.each(data.sang, function(index, value) {
+                        akkordSkipan.vers = index;
                         akkordSkipan.sangTekstKelda = data.sang[index];
                         akkordSkipan.akkordKelda = data.akkordir[index];
-                        akkordSkipan.innVidSangi(0, 0, "akkfeed");
+                        //akkordSkipan.innVidSangi(0, 0, "akkfeed");
+                        akkordSkipan.innVidSangi(0, index, "akkfeed");
                     });
                     akkordSkipan.kelduSlag = "akkfeed";
                 }
@@ -85,7 +89,9 @@ var akkordSkipan = {
         }
         
         sangPlass = document.createElement("div");
-        sangPlass.setAttribute("id","sangPlass");
+        //sangPlass.setAttribute("id","sangPlass");
+        //sangPlass.setAttribute("class","sangPlass");
+        sangPlass.setAttribute("id","sangPlass" + versId);
         sangPlass.setAttribute("class","sangPlass");
         
         if(kelduSlag !== "akkfeed") {
@@ -113,7 +119,7 @@ var akkordSkipan = {
         jFylg.setAttribute("id","jFylg");
         sangPlass.appendChild(jFylg);
         
-        this.pettaSangSundurIOrd(UISangId,versId);
+        this.pettaSangSundurIOrd(/*UISangId,versId*/);
         
         for(i=0; i<this.ollOrdini.length; i++) {
             if(this.ollOrdini[i] == "<br>") {
@@ -129,12 +135,16 @@ var akkordSkipan = {
                     
                     bokstavurTilDOM.appendChild(bokstavsTekstur);
                     
-                    bokstavurTilDOM.setAttribute("id", (i+1) + "-" + (j+1));
+                    //bokstavurTilDOM.setAttribute("id", (i+1) + "-" + (j+1));
+                    bokstavurTilDOM.setAttribute("id", this.vers + "-" + (i+1) + "-" + (j+1));
                     bokstavurTilDOM.setAttribute("class", "musIkkiYvir");
                     
                     if(kelduSlag !== "akkfeed") {
-                        bokstavurTilDOM.setAttribute("onmouseover", "akkordSkipan.markeraOrd("+(i+1)+","+(j+1)+"); akkordSkipan.innsetMinkaraOgStorrara("+(i+1)+","+(j+1)+")");
-                        bokstavurTilDOM.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara("+(i+1)+","+(j+1)+",1)");
+                        //bokstavurTilDOM.setAttribute("onmouseover", "akkordSkipan.markeraOrd("+(i+1)+","+(j+1)+"); akkordSkipan.innsetMinkaraOgStorrara("+(i+1)+","+(j+1)+")");
+                        //bokstavurTilDOM.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara("+(i+1)+","+(j+1)+",1)");
+                        
+                        bokstavurTilDOM.setAttribute("onmouseover", "akkordSkipan.markeraOrd("+versId+ "," +(i+1)+","+(j+1)+"); akkordSkipan.innsetMinkaraOgStorrara("+versId+ ","+(i+1)+","+(j+1)+")");
+                        bokstavurTilDOM.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara("+versId+","+(i+1)+","+(j+1)+",1)");
                     }
                     
                     sangPlass.appendChild(bokstavurTilDOM);
@@ -147,9 +157,9 @@ var akkordSkipan = {
             millumrumTekstur = document.createTextNode("\u00A0");
             millumrum.appendChild(millumrumTekstur);
             
-            millumrum.setAttribute("id", "m" + (i+1) + "-" + 1);
-            millumrum.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'m"+(i+1)+"\',1);");
-            millumrum.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara(\'m"+(i+1)+"\',1,1)");
+            millumrum.setAttribute("id", versId+ "-m" + (i+1) + "-" + 1);
+            millumrum.setAttribute("onmouseover", "akkordSkipan.markeraOrd("+versId+ ",\'m"+(i+1)+"\',1);");
+            millumrum.setAttribute("onclick","akkordSkipan.innsetAkkordVeljara("+versId+ ",\'m"+(i+1)+"\',1,1)");
             
             sangPlass.appendChild(millumrum);
             
@@ -160,13 +170,13 @@ var akkordSkipan = {
                 document.getElementById("sang").appendChild(sangPlass);
             }
             
-            this.vers = versId;
+            //this.vers = versId;
         }
         
-        this.innVidAkkordum(UISangId, versId);
+        this.innVidAkkordum(/*UISangId, versId*/);
     },
     
-    innVidAkkordum : function(UISangId, versId) {
+    innVidAkkordum : function(/*UISangId, versId*/) {
         var versOgAkkordir = [];
         var akkordir = [];
         var einAkkord = [];
@@ -256,7 +266,7 @@ var akkordSkipan = {
         }
     },
     
-    pettaSangSundurIOrd : function(UISangId,versId) {
+    pettaSangSundurIOrd : function(/*UISangId,versId*/) {
         var i;
         //var setningar = skra.songKeeper[UISangId].sang.sang_innihald['vers'+versId].split('<br>');
         var setningar = this.sangTekstKelda.split('<br>')
@@ -269,8 +279,8 @@ var akkordSkipan = {
         }
     },
     
-    innsetMinkaraOgStorrara : function(ordId, bokstavId) {
-        var p = $("#"+ ordId+ "-" +bokstavId);
+    innsetMinkaraOgStorrara : function(vId, ordId, bokstavId) {
+        var p = $("#"+ vId+ "-" + ordId+ "-" +bokstavId);
         var position = p.position();
         
         var vinstra = position.left-10;
@@ -285,7 +295,7 @@ var akkordSkipan = {
 
     // 2. Funktiónir til at markera orð og stilla markeringina
     
-    markeraOrd: function(ordId, bokstavId) {
+    markeraOrd: function(vId, ordId, bokstavId) {
         var i = 0;
         var j = 1;
         var halvMarkering = Math.floor(this.bokstavamongIMinkadumOrdi / 2);
@@ -299,23 +309,23 @@ var akkordSkipan = {
         }
         
         if(this.akkordirISangi[this.vers] && this.akkordirISangi[this.vers][ordId]) {
-            document.getElementById(ordId+"-"+bokstavId).setAttribute('class', 'musYvir');
+            document.getElementById(vId + "-" +ordId+"-"+bokstavId).setAttribute('class', 'musYvir');
             this.markeringByrjan = bokstavId;
             
-            if(document.getElementById("akk" + ordId+"-"+bokstavId +"-innan")) {
-                document.getElementById("akk" + ordId +"-"+ bokstavId + "-innan").setAttribute('class', 'akkordMusYvir');
+            if(document.getElementById("akk"+ vId +"-"+ ordId+"-"+bokstavId +"-innan")) {
+                document.getElementById("akk" + vId +"-" + ordId +"-"+ bokstavId + "-innan").setAttribute('class', 'akkordMusYvir');
             }
         }
         else if(ordId == this.ordSumErMinkad) {
-            if(document.getElementById(ordId + "-" + (bokstavId-bakkilongd))) { //Um markeringin heldur seg innanfyri orðið á vinstru síðu.
+            if(document.getElementById(vId + "-"+ordId + "-" + (bokstavId-bakkilongd))) { //Um markeringin heldur seg innanfyri orðið á vinstru síðu.
                 j = bokstavId-bakkilongd;
                 this.markeringByrjan = j;
-                if(document.getElementById(ordId + "-" + (j + this.bokstavamongIMinkadumOrdi-1))) { //Um markeringin heldur seg innanfyri orðið á høgru síðu.
+                if(document.getElementById(vId +"-" +ordId + "-" + (j + this.bokstavamongIMinkadumOrdi-1))) { //Um markeringin heldur seg innanfyri orðið á høgru síðu.
                     this.markeringEndi = j + this.bokstavamongIMinkadumOrdi - 1;
                     while(i < this.bokstavamongIMinkadumOrdi) {
-                        document.getElementById(ordId + "-" + j).setAttribute('class', 'musYvir');
-                        if(document.getElementById("akk" + ordId+"-innan")) {
-                            document.getElementById("akk" + ordId+"-innan").setAttribute('class', 'akkordMusYvir');
+                        document.getElementById(vId + "-" + ordId + "-" + j).setAttribute('class', 'musYvir');
+                        if(document.getElementById("akk"+vId +"-" + ordId+"-innan")) {
+                            document.getElementById("akk" +vId + "-" + ordId+"-innan").setAttribute('class', 'akkordMusYvir');
                         }
                         i++;
                         j++;
@@ -323,24 +333,24 @@ var akkordSkipan = {
                 }
                 else {
                     //flyt alla markeringina so nógv pláss til vinstru sum er neyðugt.
-                    this.markeraOrd(ordId, bokstavId - ((j + this.bokstavamongIMinkadumOrdi) - this.telBokstavirIOrdi(ordId)));
+                    this.markeraOrd(vId, ordId, bokstavId - ((j + this.bokstavamongIMinkadumOrdi) - this.telBokstavirIOrdi(ordId)));
                 }
             }
             else if(bokstavId - bakkilongd <= 0) {
                 //flyt alla markeringina so nógv pláss til høgru sum er neyðugt.
                 if(bokstavId-bakkilongd == 0) {
-                    this.markeraOrd(ordId, ((bokstavId-bakkilongd)*-1) + (bokstavId)+1);
+                    this.markeraOrd(vId, ordId, ((bokstavId-bakkilongd)*-1) + (bokstavId)+1);
                 }
                 else {
-                    this.markeraOrd(ordId, ((bokstavId-bakkilongd)*-1) + bokstavId);
+                    this.markeraOrd(vId, ordId, ((bokstavId-bakkilongd)*-1) + bokstavId);
                 }
             }
         }
         else {
-            while(document.getElementById(ordId + "-" + j)) {
-                document.getElementById(ordId + "-" + j).setAttribute('class', 'musYvir');
-                if(document.getElementById("akk" + ordId+"-innan")) {
-                    document.getElementById("akk" + ordId+"-innan").setAttribute('class', 'akkordMusYvir');
+            while(document.getElementById(vId + "-"+ordId + "-" + j)) {
+                document.getElementById(vId + "-" +ordId + "-" + j).setAttribute('class', 'musYvir');
+                if(document.getElementById("akk" + vId + "-" + ordId+"-innan")) {
+                    document.getElementById("akk" + vId + "-" + ordId+"-innan").setAttribute('class', 'akkordMusYvir');
                 }
                 j++;
             }
@@ -352,10 +362,10 @@ var akkordSkipan = {
     
     strikaMarkering : function(ordId) {
         var i = 1;
-        while(document.getElementById(ordId + "-" + i)) {
-            document.getElementById(ordId + "-" + i).setAttribute('class', 'musIkkiYvir');
-            if(document.getElementById("akk" + ordId+"-"+this.bokstavurSumErMarkeradur+"-innan")) {
-                document.getElementById("akk" + ordId+"-"+this.bokstavurSumErMarkeradur+"-innan").setAttribute('class', 'akkord');
+        while(document.getElementById(this.vers + "-" +ordId + "-" + i)) {
+            document.getElementById(this.vers + "-"+ordId + "-" + i).setAttribute('class', 'musIkkiYvir');
+            if(document.getElementById("akk" + this.vers+ "-" + ordId+"-"+this.bokstavurSumErMarkeradur+"-innan")) {
+                document.getElementById("akk" + this.vers + "-" + ordId+"-"+this.bokstavurSumErMarkeradur+"-innan").setAttribute('class', 'akkord');
             }
             i++;
         }
@@ -373,7 +383,7 @@ var akkordSkipan = {
         else {
             if(akkordSkipan.bokstavamongIMinkadumOrdi < bokstavatal) {
                 akkordSkipan.bokstavamongIMinkadumOrdi++;
-                this.markeraOrd(ordId, bokstvId);
+                this.markeraOrd(this.vers,ordId, bokstvId);
             }
             
             if(akkordSkipan.bokstavamongIMinkadumOrdi == bokstavatal) {
@@ -401,14 +411,14 @@ var akkordSkipan = {
                 akkordSkipan.bokstavamongIMinkadumOrdi--;
             }
             
-            this.markeraOrd(ordId, bokstvId);
+            this.markeraOrd(this.vers, ordId, bokstvId);
         }
     },
     
     telBokstavirIOrdi: function(ordId) {
         var bokstavur = 1;
         
-        while(document.getElementById(ordId + "-" + bokstavur)) {
+        while(document.getElementById(this.vers+"-"+ordId + "-" + bokstavur)) {
             bokstavur++;
         }
         
@@ -417,9 +427,9 @@ var akkordSkipan = {
     
     // 3. Funktiónir til at velja akkord og seta hana inn í tekstin
     
-    innsetAkkordVeljara : function(ordId, bokstvId, akkordMenu) {
+    innsetAkkordVeljara : function(vId, ordId, bokstvId, akkordMenu) {
         var i;
-        var p = $("#" + ordId + "-" + bokstvId);
+        var p = $("#"+vId + "-" + ordId + "-" + bokstvId);
         var position = p.position();
         
         var vinstra = position.left-7;
@@ -470,7 +480,7 @@ var akkordSkipan = {
             strikaLink = document.createElement("a");
             strikaLink.setAttribute("href", "#");
             strikaLink.setAttribute("class", "akkord_link");
-            strikaLink.setAttribute("onclick", "akkordSkipan.strikaAkkord('"+this.ordSumErMarkerad+"','"+this.bokstavurSumErMarkeradur+"');");
+            strikaLink.setAttribute("onclick", "akkordSkipan.strikaAkkord("+this.vers+",'"+this.ordSumErMarkerad+"','"+this.bokstavurSumErMarkeradur+"');");
             
             strika = document.createElement("li");
             strika.appendChild(document.createTextNode("Strika"));
@@ -529,8 +539,8 @@ var akkordSkipan = {
                 });
                 
                 //Er ein akkord á høgru síðu?
-                if($('#'+markOrd+"-"+markBokstv).next()[0].outerHTML !== "<br>" && $('#'+markOrd+"-"+markBokstv).next().attr('id').substring(0,3) === 'akk') {
-                    akkordNavn = $('#'+markOrd+"-"+markBokstv).next().attr('id').split('-');
+                if($('#'+this.vers+"-"+markOrd+"-"+markBokstv).next()[0].outerHTML !== "<br>" && $('#'+this.vers+"-"+markOrd+"-"+markBokstv).next().attr('id').substring(0,3) === 'akk') {
+                    akkordNavn = $('#'+this.vers+"-"+markOrd+"-"+markBokstv).next().attr('id').split('-');
                     
                     akkordTilHogru = akkordNavn[1];
                 }
@@ -571,7 +581,7 @@ var akkordSkipan = {
         }
         
         if(this.kelduSlag === "skra") {
-            this.innsetAkkordVeljara(this.ordSumErMarkerad, this.bokstavurSumErMarkeradur, 2);
+            this.innsetAkkordVeljara(this.vers,this.ordSumErMarkerad, this.bokstavurSumErMarkeradur, 2);
         }
     },
     
@@ -591,9 +601,9 @@ var akkordSkipan = {
         haegstaBokstavsId++;
         nyttMillumrumFyrr = document.createElement("span");
         nyttMillumrumFyrr.appendChild(document.createTextNode("\u00A0"));
-        nyttMillumrumFyrr.setAttribute("id", mOrd + "-" + haegstaBokstavsId);
-        nyttMillumrumFyrr.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'"+mOrd+"\',\'"+haegstaBokstavsId+"\')");
-        nyttMillumrumFyrr.setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara(\'"+mOrd+"\', \'"+haegstaBokstavsId+"\',1)");
+        nyttMillumrumFyrr.setAttribute("id",this.vers + "-" + mOrd + "-" + haegstaBokstavsId);
+        nyttMillumrumFyrr.setAttribute("onmouseover", "akkordSkipan.markeraOrd("+this.vers+",\'"+mOrd+"\',\'"+haegstaBokstavsId+"\')");
+        nyttMillumrumFyrr.setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara("+this.vers+",\'"+mOrd+"\', \'"+haegstaBokstavsId+"\',1)");
         
         //fortel foreldrinum til vinstru hvat nýtt barn tað eigur á sínu høgru síðu
         $.each(this.akkordirISangi[this.vers][mOrd+""], function(lykil, virdi) {
@@ -605,15 +615,15 @@ var akkordSkipan = {
         haegstaBokstavsId++;
         nyttMillumrumEftir = document.createElement("span");
         nyttMillumrumEftir.appendChild(document.createTextNode("\u00A0"));
-        nyttMillumrumEftir.setAttribute("id", mOrd + "-" + haegstaBokstavsId);
-        nyttMillumrumEftir.setAttribute("onmouseover", "akkordSkipan.markeraOrd(\'"+mOrd+"\',\'"+haegstaBokstavsId+"\')");
-        nyttMillumrumEftir.setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara(\'"+mOrd+"\',\'"+haegstaBokstavsId+"\',1)");
+        nyttMillumrumEftir.setAttribute("id", this.vers +"-"+ mOrd + "-" + haegstaBokstavsId);
+        nyttMillumrumEftir.setAttribute("onmouseover", "akkordSkipan.markeraOrd("+this.vers+",\'"+mOrd+"\',\'"+haegstaBokstavsId+"\')");
+        nyttMillumrumEftir.setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara("+this.vers+",\'"+mOrd+"\',\'"+haegstaBokstavsId+"\',1)");
         
         //Fortel hesum foreldrinum hvat fyri barn tað eigur á sínu høgru síðu
         this.akkordirISangi[this.vers][mOrd+""][mBokstv+""]["h"] = haegstaBokstavsId;
         
-        $(nyttMillumrumFyrr).insertBefore('#akk' + mOrd + '-' + mBokstv);
-        $(nyttMillumrumEftir).insertAfter('#' + mOrd + '-' + mBokstv);
+        $(nyttMillumrumFyrr).insertBefore('#akk'+ this.vers + "-" + mOrd + '-' + mBokstv);
+        $(nyttMillumrumEftir).insertAfter('#' +this.vers + "-" + mOrd + '-' + mBokstv);
     },
     
     koyrAkkIdomOgAkkObj : function(akkordir) {
@@ -655,7 +665,7 @@ var akkordSkipan = {
         //Koyr akkordir í DOM
         akkordHaldari = document.createElement("span");
         akkordHaldari.setAttribute("class","akkord");
-        akkordHaldari.setAttribute("id","akk"+this.ordSumErMarkerad+"-"+this.markeringByrjan+"-innan");
+        akkordHaldari.setAttribute("id","akk"+this.vers+"-"+this.ordSumErMarkerad+"-"+this.markeringByrjan+"-innan");
         
         if(akkordir[1] | akkordir[1] == "0") {
             tempAkk = this.akkordir1[akkordir[1]];
@@ -667,23 +677,23 @@ var akkordSkipan = {
         akkordHaldari.appendChild(document.createTextNode(tempAkk));
         
         //bygg akkordhaldara
-        if(!document.getElementById("akk"+this.ordSumErMarkerad+'-'+this.markeringByrjan)) {
+        if(!document.getElementById("akk"+this.vers+"-"+this.ordSumErMarkerad+'-'+this.markeringByrjan)) {
             uttariAkkordHaldari = document.createElement("span");
             uttariAkkordHaldari.setAttribute("style","position:absolute;");
-            uttariAkkordHaldari.setAttribute("id", "akk"+this.ordSumErMarkerad + '-' + this.markeringByrjan);
+            uttariAkkordHaldari.setAttribute("id", "akk"+this.vers+"-"+this.ordSumErMarkerad + '-' + this.markeringByrjan);
             
-            $(uttariAkkordHaldari).insertBefore('#' + this.ordSumErMarkerad + "-" + this.markeringByrjan);
+            $(uttariAkkordHaldari).insertBefore('#'+this.vers+"-" + this.ordSumErMarkerad + "-" + this.markeringByrjan);
         }
         
         //Koyr akkord í akkordhaldara.
-        document.getElementById("akk"+this.ordSumErMarkerad+'-'+this.markeringByrjan).innerHTML = "";
-        document.getElementById("akk"+this.ordSumErMarkerad+'-'+this.markeringByrjan).appendChild(akkordHaldari);
+        document.getElementById("akk"+this.vers+"-"+ this.ordSumErMarkerad+'-'+this.markeringByrjan).innerHTML = "";
+        document.getElementById("akk"+this.vers+"-"+ this.ordSumErMarkerad+'-'+this.markeringByrjan).appendChild(akkordHaldari);
         
         //Tilpassa akkordirnar so tær ikki verða viklaðar saman
         this.flytTekstFyriAkk(tempAkk,this.ordSumErMarkerad, this.markeringByrjan);
         
         //bakka til fyrrverandi akkord og tilpassa eisini hesa
-        bokst = $('#'+this.ordSumErMarkerad+"-"+this.markeringByrjan);
+        bokst = $('#'+this.vers+"-"+this.ordSumErMarkerad+"-"+this.markeringByrjan);
         bokst = $(bokst).prev();
         do {
             bokst = $(bokst).prev();
@@ -697,7 +707,7 @@ var akkordSkipan = {
             ordOgBokst = akkPettir[1].split("-");
             tempAkk = document.getElementById(vinstraAkk + "-innan").innerHTML;
             
-            this.flytTekstFyriAkk(tempAkk, ordOgBokst[0], ordOgBokst[1]);
+            this.flytTekstFyriAkk(tempAkk, ordOgBokst[1], ordOgBokst[2]);
         }
     },
 
@@ -724,7 +734,7 @@ var akkordSkipan = {
         
         tekinIAkk = akkord.length;
         
-        valdiBokst = $('#'+ord+"-"+bokst);
+        valdiBokst = $('#'+this.vers+"-"+ord+"-"+bokst);
         
         for(i=0; i<tekinIAkk; i++) {
             valdiBokst = $(valdiBokst).next();
@@ -740,14 +750,41 @@ var akkordSkipan = {
         //leggi helvtina aftrat fyri at gera i meira følsamt
         if((i*1.5)<tekinIAkk) {
             //document.getElementById(this.ordSumErMarkerad+"-"+this.bokstavurSumErMarkeradur).setAttribute("style", "margin-right:"+(tekinIAkk/2)+"em");
-            document.getElementById(ord+"-"+bokst).setAttribute("style", "margin-right:"+(tekinIAkk/2)+"em");
+            document.getElementById(this.vers+"-"+ord+"-"+bokst).setAttribute("style", "margin-right:"+(tekinIAkk/2)+"em");
         }
         else {
-            document.getElementById(ord+"-"+bokst).removeAttribute("style");
+            document.getElementById(this.vers+"-"+ord+"-"+bokst).removeAttribute("style");
         }
     },
     
-    strikaAkkord : function(markeraOrd, markeradurbokstv) {
+    transponera : function(uppEllaNidur) {
+        var tempAkk = "";
+        
+        if(uppEllaNidur === "upp") {
+            this.transponering = this.transponering + 1;
+        }
+        else if(uppEllaNidur === "nidur") {
+            this.transponering = this.transponering - 1;
+        }
+        else if(uppEllaNidur === "nullstilla") {
+            this.transponering = 143;
+        }
+        
+        if(!jQuery.isEmptyObject(this.akkordirISangi[this.vers])) {
+            $.each(this.akkordirISangi[this.vers], function(key, val) {
+                $.each(akkordSkipan.akkordirISangi[akkordSkipan.vers][key], function(k,v) {
+                    tempAkk = "";
+                    if(typeof v[2] !== "undefined") {
+                        tempAkk = akkordSkipan.akkordir2[v[2]];
+                    }
+                    tempAkk = akkordSkipan.akkordir1[((v[1] + akkordSkipan.transponering) % 12) + 1] + tempAkk;
+                    document.getElementById("akk"+akkordSkipan.vers+"-"+key+"-"+k+"-innan").innerHTML = tempAkk;
+                });
+            });
+        }
+    },
+    
+    strikaAkkord : function(vId, markeraOrd, markeradurbokstv) {
         var stringMarkerad = this.ordSumErMarkerad + "";
         var prefix = stringMarkerad.substring(0,1);
         var ord = stringMarkerad.substring(1,stringMarkerad.length);
@@ -786,16 +823,16 @@ var akkordSkipan = {
             }
             
             //sletta barnið til høgru
-            document.getElementById("sangPlass").removeChild(document.getElementById(markeraOrd+"-"+this.akkordirISangi[this.vers][markeraOrd][markeradurbokstv]['h']));
+            document.getElementById("sangPlass"+vId).removeChild(document.getElementById(vId+"-"+markeraOrd+"-"+this.akkordirISangi[this.vers][markeraOrd][markeradurbokstv]['h']));
             
             //sletta hesa akkordina
-            document.getElementById("akk"+markeraOrd+"-"+markeradurbokstv).removeChild(document.getElementById("akk"+markeraOrd+"-"+markeradurbokstv+"-innan"));
-            document.getElementById("sangPlass").removeChild(document.getElementById("akk"+markeraOrd+"-"+markeradurbokstv));
+            document.getElementById("akk"+vId+"-"+markeraOrd+"-"+markeradurbokstv).removeChild(document.getElementById("akk"+vId+"-"+markeraOrd+"-"+markeradurbokstv+"-innan"));
+            document.getElementById("sangPlass"+vId).removeChild(document.getElementById("akk"+vId+"-"+markeraOrd+"-"+markeradurbokstv));
             if(talAvAkkordum > 1) {
-                document.getElementById("sangPlass").removeChild(document.getElementById(markeraOrd+"-"+markeradurbokstv));
+                document.getElementById("sangPlass"+vId).removeChild(document.getElementById(vId + "-"+markeraOrd+"-"+markeradurbokstv));
             }
             else if(talAvAkkordum === 1) {
-                $('#'+markeraOrd+"-"+markeradurbokstv).prev().remove();
+                $('#'+vId+"-"+markeraOrd+"-"+markeradurbokstv).prev().remove();
             }
             delete this.akkordirISangi[this.vers][markeraOrd][markeradurbokstv];
             
@@ -803,12 +840,12 @@ var akkordSkipan = {
                 //Um bert ein akkord eftir sletting; broyt bókstavsID til 1
                 $.each(this.akkordirISangi[this.vers][markeraOrd], function(lyk, vir) {
                     if(lyk !== "1") {
-                        document.getElementById(markeraOrd+"-"+lyk).setAttribute("onmouseover", "akkordSkipan.markeraOrd('"+markeraOrd+"',1)");
-                        document.getElementById(markeraOrd+"-"+lyk).setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara('"+markeraOrd+"',1,1)");
-                        document.getElementById(markeraOrd+"-"+lyk).setAttribute("id",markeraOrd+"-1");
+                        document.getElementById(vId+"-"+markeraOrd+"-"+lyk).setAttribute("onmouseover", "akkordSkipan.markeraOrd("+vId+",'"+markeraOrd+"',1)");
+                        document.getElementById(vId+"-"+markeraOrd+"-"+lyk).setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara("+vId+",'"+markeraOrd+"',1,1)");
+                        document.getElementById(vId+"-"+markeraOrd+"-"+lyk).setAttribute("id",vId+"-"+markeraOrd+"-1");
                         
-                        document.getElementById("akk"+markeraOrd+"-"+lyk+"-innan").setAttribute("id", "akk"+markeraOrd+"-1-innan");
-                        document.getElementById("akk"+markeraOrd+"-"+lyk).setAttribute("id", "akk"+markeraOrd+"-1");
+                        document.getElementById("akk"+vId+"-"+markeraOrd+"-"+lyk+"-innan").setAttribute("id", "akk"+vId+"-"+markeraOrd+"-1-innan");
+                        document.getElementById("akk"+vId+"-"+markeraOrd+"-"+lyk).setAttribute("id", "akk"+vId+"-"+markeraOrd+"-1");
                         
                         akkordSkipan.akkordirISangi[akkordSkipan.vers][markeraOrd][1] = vir;
                         delete akkordSkipan.akkordirISangi[akkordSkipan.vers][markeraOrd][lyk];
@@ -818,8 +855,8 @@ var akkordSkipan = {
         }
         else {
             delete this.akkordirISangi[this.vers][markeraOrd][markeradurbokstv];
-            document.getElementById("akk"+markeraOrd+"-"+markeradurbokstv).removeChild(document.getElementById("akk"+markeraOrd+"-"+markeradurbokstv+"-innan"));
-            document.getElementById("sangPlass").removeChild(document.getElementById("akk"+markeraOrd+"-"+markeradurbokstv));
+            document.getElementById("akk"+vId+"-"+markeraOrd+"-"+markeradurbokstv).removeChild(document.getElementById("akk"+vId+"-"+markeraOrd+"-"+markeradurbokstv+"-innan"));
+            document.getElementById("sangPlass"+vId).removeChild(document.getElementById("akk"+vId+"-"+markeraOrd+"-"+markeradurbokstv));
         }
         
         if(jQuery.isEmptyObject(this.akkordirISangi[this.vers][markeraOrd])) {
