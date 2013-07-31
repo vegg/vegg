@@ -699,7 +699,6 @@ var akkordSkipan = {
             bokst = $(bokst).prev();
         } while(bokst.attr("id") !== "jFylg" && bokst[0].outerHTML !== "<br>" && bokst.attr("id").substring(0,3) !== "akk");
         
-        
         vinstraAkk = bokst.attr("id");
         
         if(vinstraAkk && vinstraAkk.substring(0,3) === "akk") {

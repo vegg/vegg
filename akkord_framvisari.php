@@ -27,7 +27,7 @@
     $(document).ready(function(){
         akkordSkipan.tendra("akkfeed");
     });
-    /*
+    /* 
     //http://techoctave.com/c7/posts/60-simple-long-polling-example-with-javascript-and-jquery
         $(document).ready(function(){
             framvisari_akkordSkipan.forceHeinta();
