@@ -1,3 +1,8 @@
+dokumentLutur = {
+    menuOpin: false,
+    menuId : ""
+};
+
 //Heldur skil á øllum sum hevur við leitikassan at gera
 searchBox = function() {
     //VARIABLAR
@@ -503,3 +508,16 @@ var sangInnskrivari = {
         }
     }
 }
+
+//tendra document event handlaran
+$(document).ready(function() {
+    $(document).click(function() {
+        if(dokumentLutur.menuOpin) {
+            if(dokumentLutur.menuId === "akkordVeljiListi") {
+                document.getElementById("jFylg").innerHTML = "";
+                dokumentLutur.menuOpin = false;
+                dokumentLutur.menuId = "";
+            }
+        }
+    });
+});
