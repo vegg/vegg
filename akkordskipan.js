@@ -183,37 +183,44 @@ var akkordSkipan = {
         }
         
         if(kelduSlag !== "akkfeed") {
-            $("div.sangPlass > [id*='"+versId+"-']").click(function(e) {
-                if(!dokumentLutur.menuOpin && dokumentLutur.menuId !== "akkordVeljiListi") {
-                    if(e.preventDefault)
-                        e.preventDefault(); //Mozilla
-                    else
-                        e.returnValue = false; //IE
-                    
-                    //alt annað enn IE8 og eldri
-                    if('bubbles' in e) {
-                        if(e.bubbles) {
-                            e.stopPropagation();
-                        }
-                    }
-                    //IE8 og eldri
-                    else {
-                        e.cancelBubble = true;
-                    }
-                    
-                    var idPettir = $(this).attr('id').split('-');
-                    
-                    dokumentLutur.menuOpin = true;
-                    dokumentLutur.menuId = "akkordVeljiListi";
-                    
-                    akkordSkipan.innsetAkkordVeljara(idPettir[0],idPettir[1],idPettir[2],1);
-                
-                }
-                
-            });
+            this.eventHandlersABokstavar(versId);
         }
         
         this.innVidAkkordum(/*UISangId, versId*/);
+        
+    },
+    
+    eventHandlersABokstavar : function(versId) {
+        $("div.sangPlass > [id*='"+versId+"-']").click(function(e) {
+            var idPettir;
+            
+            if(!dokumentLutur.menuOpin && dokumentLutur.menuId !== "akkordVeljiListi") {
+                if(e.preventDefault)
+                    e.preventDefault(); //Mozilla
+                else
+                    e.returnValue = false; //IE
+                
+                //alt annað enn IE8 og eldri
+                if('bubbles' in e) {
+                    if(e.bubbles) {
+                        e.stopPropagation();
+                    }
+                }
+                //IE8 og eldri
+                else {
+                    e.cancelBubble = true;
+                }
+                
+                idPettir = $(this).attr('id').split('-');
+                
+                dokumentLutur.menuOpin = true;
+                dokumentLutur.menuId = "akkordVeljiListi";
+                
+                akkordSkipan.innsetAkkordVeljara(idPettir[0],idPettir[1],idPettir[2],1);
+            
+            }
+            
+        });
     },
     
     innVidAkkordum : function(/*UISangId, versId*/) {
@@ -680,7 +687,7 @@ var akkordSkipan = {
         nyttMillumrumFyrr.setAttribute("id",this.vers + "-" + mOrd + "-" + haegstaBokstavsId);
         if(this.kelduSlag === "skra") {
             nyttMillumrumFyrr.setAttribute("onmouseover", "akkordSkipan.markeraOrd("+this.vers+",\'"+mOrd+"\',\'"+haegstaBokstavsId+"\')");
-            nyttMillumrumFyrr.setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara("+this.vers+",\'"+mOrd+"\', \'"+haegstaBokstavsId+"\',1)");
+            //nyttMillumrumFyrr.setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara("+this.vers+",\'"+mOrd+"\', \'"+haegstaBokstavsId+"\',1)");
         }
         
         //fortel foreldrinum til vinstru hvat nýtt barn tað eigur á sínu høgru síðu
@@ -696,7 +703,7 @@ var akkordSkipan = {
         nyttMillumrumEftir.setAttribute("id", this.vers +"-"+ mOrd + "-" + haegstaBokstavsId);
         if(this.kelduSlag === "skra") {
             nyttMillumrumEftir.setAttribute("onmouseover", "akkordSkipan.markeraOrd("+this.vers+",\'"+mOrd+"\',\'"+haegstaBokstavsId+"\')");
-            nyttMillumrumEftir.setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara("+this.vers+",\'"+mOrd+"\',\'"+haegstaBokstavsId+"\',1)");
+            //nyttMillumrumEftir.setAttribute("onclick", "akkordSkipan.innsetAkkordVeljara("+this.vers+",\'"+mOrd+"\',\'"+haegstaBokstavsId+"\',1)");
         }
         
         //Fortel hesum foreldrinum hvat fyri barn tað eigur á sínu høgru síðu
@@ -704,6 +711,10 @@ var akkordSkipan = {
         
         $(nyttMillumrumFyrr).insertBefore('#akk'+ this.vers + "-" + mOrd + '-' + mBokstv);
         $(nyttMillumrumEftir).insertAfter('#' +this.vers + "-" + mOrd + '-' + mBokstv);
+        
+        if(this.kelduSlag !== "akkfeed") {
+            this.eventHandlersABokstavar(this.vers);
+        }
     },
     
     koyrAkkIdomOgAkkObj : function(akkordir) {
