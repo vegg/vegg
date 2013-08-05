@@ -863,7 +863,7 @@ var akkordSkipan = {
             this.transponering = 143;
         }
         
-        if(!jQuery.isEmptyObject(this.akkordirISangi[this.vers])) {
+        /*if(!jQuery.isEmptyObject(this.akkordirISangi[this.vers])) {
             $.each(this.akkordirISangi[this.vers], function(key, val) {
                 $.each(akkordSkipan.akkordirISangi[akkordSkipan.vers][key], function(k,v) {
                     tempAkk = "";
@@ -874,7 +874,21 @@ var akkordSkipan = {
                     document.getElementById("akk"+akkordSkipan.vers+"-"+key+"-"+k+"-innan").innerHTML = tempAkk;
                 });
             });
+        }*/
+        
+        if(!jQuery.isEmptyObject(this.akkordirISangi[this.vers])) {
+            $.each(this.akkordirISangi[this.vers],function(key, val) {
+                $.each(akkordSkipan.akkordirISangi[akkordSkipan.vers][key], function(k,v) {
+                    tempAkk = "";
+                    if(typeof v[2] !== "undefined") {
+                        tempAkk = akkordSkipan.akkordir2[v[2]];
+                    }
+                    tempAkk = akkordSkipan.akkordir1[((parseInt(v[1])+akkordSkipan.transponering) % 12)+1] + tempAkk;
+                    document.getElementById("akk"+akkordSkipan.vers+"-"+key+"-"+k+"-innan").innerHTML = tempAkk;
+                });
+            });
         }
+
     },
     
     strikaAkkord : function(vId, markeraOrd, markeradurbokstv) {
