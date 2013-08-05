@@ -550,10 +550,13 @@ var akkordSkipan = {
             strikaLink.setAttribute("href", "#");
             strikaLink.setAttribute("class", "akkord_link");
             strikaLink.setAttribute("onclick", "akkordSkipan.strikaAkkord("+this.vers+",'"+this.ordSumErMarkerad+"','"+this.bokstavurSumErMarkeradur+"');");
+            strikaLink.appendChild(document.createTextNode("Strika"));
             
             strika = document.createElement("li");
-            strika.appendChild(document.createTextNode("Strika"));
+            //strika.appendChild(document.createTextNode("Strika"));
             
+            strika.appendChild(strikaLink);
+            akkordListi.appendChild(strika);
             //strikaLink.appendChild(strika);
             //akkordListi.appendChild(strikaLink);
         }
