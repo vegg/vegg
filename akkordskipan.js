@@ -35,14 +35,16 @@ var akkordSkipan = {
         }
         //Heintar via long-polling frá databasanum
         else if(kelduSlag === "akkfeed") {
+            this.heintaEinaferd();
             this.heinta();
         }
     },
     
-    heinta: function() {
+    heintaEinaferd : function() {
         $.ajax({
-            url:"lesAkkFeed.php",
+            url:"feed.php",
             type: "post",
+            data: {slag:"akkfeed1"},
             success:function(data) {
                 if(data != "") {
                     document.getElementById("sang").innerHTML = "";
@@ -50,7 +52,26 @@ var akkordSkipan = {
                         akkordSkipan.vers = index;
                         akkordSkipan.sangTekstKelda = data.sang[index];
                         akkordSkipan.akkordKelda = data.akkordir[index];
-                        //akkordSkipan.innVidSangi(0, 0, "akkfeed");
+                        akkordSkipan.innVidSangi(0, index, "akkfeed");
+                    });
+                    akkordSkipan.kelduSlag = "akkfeed";
+                }
+            }, dataType: "json"
+        });
+    },
+    
+    heinta: function() {
+        $.ajax({
+            url:"feed.php",
+            type: "post",
+            data: {slag:"akkfeed+"},
+            success:function(data) {
+                if(data != "") {
+                    document.getElementById("sang").innerHTML = "";
+                    $.each(data.sang, function(index, value) {
+                        akkordSkipan.vers = index;
+                        akkordSkipan.sangTekstKelda = data.sang[index];
+                        akkordSkipan.akkordKelda = data.akkordir[index];
                         akkordSkipan.innVidSangi(0, index, "akkfeed");
                     });
                     akkordSkipan.kelduSlag = "akkfeed";

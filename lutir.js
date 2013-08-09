@@ -349,7 +349,7 @@ var framsyning = {
         //sang = sang.replace("\n", /<br>/g);
         
         //Skriva til databasa
-        $.post("innskrivafeed.php", {"innihald":sang});
+        $.post("feed.php", {"slag":"skrivafeed","innihald":sang});
     },
     
     koyrIAkkFeed : function(sangNr, versNr) {
@@ -366,7 +366,7 @@ var framsyning = {
         sang = JSON.stringify(sang);
         
         if(akkordir) {
-            $.post("innskrivaakkfeed.php", {"innihald":sang, "akkordir":akkordir});
+            $.post("feed.php", {"slag":"skrivaakkfeed", "innihald":sang, "akkordir":akkordir});
         }
     },
     

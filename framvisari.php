@@ -20,13 +20,29 @@
     <script>
     var i = 0;
         $(document).ready(function(){
+            heintaEinaferd();
             heinta();
         });
         
+        function heintaEinaferd() {
+            $.ajax({
+                url:"feed.php",
+                type: "post",
+                data: {slag:"feed1"},
+                success:function(d) {
+                    if(d != "" && d != null) {
+                        document.getElementById('feedSpot').innerHTML = d.ting;
+                    }
+                },
+                dataType: "json"
+            });
+        }
+        
         function heinta() {
             $.ajax({
-                url:"lesFeed.php",
+                url:"feed.php",
                 type:"post",
+                data: {slag:"feed+"},
                 success:function(data) {
                     if(data != "" && data != null) {
                         document.getElementById('feedSpot').innerHTML = data.ting;
