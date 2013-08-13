@@ -11,13 +11,14 @@ searchBox = function() {
     //FUNKTIÓNIR
     //sendir eitt query til php-scriptið uppskot.php og fær sang tittulin aftur sum JSON
     this.sendQuery = function() {
-        this.search = document.getElementById("search").value;
-        
+        //this.search = document.getElementById("search").value;
+        var search = document.getElementById("search").value;
+        /*
         //eg má finna onkran máta reinsa input uppá ein fornuftigan máta, so ikki allar databasin verður dumped í einum
         //if(this.search.length > 0) {
             $('#autocomplete-list').html('');
             
-            $.getJSON('uppskot.php?key=' + this.search + '',
+            $.getJSON('uppskot.php?key=' + search + '',
                 function(output) {
                     $.each(output, function(key,val) {
                         $('#autocomplete-list').append('<a href="#" onclick="skra.fetchSong('+key+');"><li>'+val['sang_tittul']+'</li></a>');
@@ -25,6 +26,21 @@ searchBox = function() {
                     });
                 });
        // }
+        */
+        
+        $('#autocomplete-list').html('');
+        $.ajax({
+            url:"databasi.php",
+            type:"post",
+            data:{key:search,slag:"leita"},
+            success:function(output){
+                $.each(output, function(key,val) {
+                        $('#autocomplete-list').append('<a href="#" onclick="skra.fetchSong('+key+');"><li>'+val['sang_tittul']+'</li></a>');
+                        $('#searchsuggestiondropdown').attr('class', 'searchsuggestiondropdown-open');
+                    });
+            },
+            dataType:"json"
+       });
     };
     
     //Ruddar leitikassan tá trýst verður á hann
@@ -44,6 +60,7 @@ var skra = {
     
     //FUNKTIÓNIR
     fetchSong : function(songId) {
+        /*
         $.getJSON('finnsang.php?key=' + songId+ '',
         function(output) {
             $.each(output, function(key,val) {
@@ -57,6 +74,28 @@ var skra = {
                 skra.songMenuNum++;
             });
         });
+        
+        */
+        
+        $.ajax({
+            url:"databasi.php",
+            type:"post",
+            data:{key:songId,slag:"takting"},
+            success:function(output) {
+                $.each(output, function(key,val) {
+                    var songKey = "lis" + skra.songMenuNum;
+                    skra.songKeeper.push(output);
+                    
+                    $('#list-list').append('<li id="'+songKey+'"><a id="'+songKey+'_lnk" href="#" onclick="undansyning.sendTilUndansyning(\''+
+                                           songKey+'\');">'+val['sang_tittul']+'</a> - <a href="#" onclick="skra.strikaILista(\''+songKey+
+                                           '\');">X</a><a href="#" onclick="framsyning.koyrIFramsyning('+skra.songMenuNum+
+                                           ')"><img src="grafikkur/kanon.bmp" style="position:relative;top:5px;left:5px;"></a></li>');
+                    skra.songMenuNum++;
+                });
+            },
+            dataType:"json"
+        });
+        
         //Tøm leitikassan
         document.getElementById("search").value = "";
         document.getElementById("autocomplete-list").innerHTML = "";
@@ -482,7 +521,8 @@ var sangInnskrivari = {
             innihald += (i != undansyning.VERS_NOGD) ? document.getElementById("ns_vers" + i).value + "((vers))" : document.getElementById("ns_vers" + i).value;
         }
         
-        $.post("innskriva.php", {"sang_id":DBsang_id, "yvirskrift":yvirskrift, "innihald":innihald, "gerd":gerd});
+        //$.post("innskriva.php", {"sang_id":DBsang_id, "yvirskrift":yvirskrift, "innihald":innihald, "gerd":gerd});
+        $.post("databasi.php", {slag:"innskriva",sang_id:DBsang_id, yvirskrift:yvirskrift, innihald:innihald, gerd:gerd});
         
         //uppdatera sangin í UI, um talan er um eina broyting
         if(gerd=="broyt") {

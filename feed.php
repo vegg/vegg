@@ -9,7 +9,7 @@ if($mysqli->connect_errno) {
 }
 else {
     $lesiSlag = $_POST['slag'];
-    $mysqli->real_escape_string($lesiSlag);
+    $lesiSlag = $mysqli->real_escape_string($lesiSlag);
     
     if($lesiSlag == "feed1") {
         $fyrisp = "SELECT * FROM feed WHERE feed_id = 1";
@@ -87,6 +87,7 @@ function polla($mysqli,$fyrisp, $slag) {
 }
 
 function innskriva($mysqli,$fyrisp) {
+    $mysqli->set_charset("utf8");
     if($mysqli->query($fyrisp)) {
         echo 1;
     }
