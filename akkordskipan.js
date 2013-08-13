@@ -1005,6 +1005,7 @@ var akkordSkipan = {
         
         sendastTilDB = JSON.stringify(skra.songKeeper[undansyning.VALDUR_SANGUR].sang.sang_akkordir);
         
-        $.post("innskrivaakk.php",{"sang_id":undansyning.valdur_sangurDB,"akkordir":sendastTilDB});
+        //$.post("innskrivaakk.php",{"sang_id":undansyning.valdur_sangurDB,"akkordir":sendastTilDB});
+        $.post("databasi.php",{slag:"akkinnskriva","sang_id":undansyning.valdur_sangurDB,"akkordir":sendastTilDB});
     }
 }

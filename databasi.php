@@ -58,6 +58,15 @@ else {
         
         innskriva($mysqli,$fyrisp);
     }
+    elseif($handling == "akkinnskriva") {
+        $SANG_ID = $_POST['sang_id'];
+        $INNIHALD = $_POST['akkordir'];
+        $INNIHALD = $mysqli->real_escape_string($INNIHALD);
+        
+        $fyrisp = "UPDATE sangir SET sang_akkordir = \"$INNIHALD\" WHERE sang_id = $SANG_ID";
+        
+        innskriva($mysqli, $fyrisp);
+    }
 }
 
 function leita($mysqli, $fyrisp) {
