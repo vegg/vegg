@@ -1,18 +1,26 @@
+body {
+
+}
+
 li {
     list-style-type: none;
 }
 
 .wrapper {
     width: 1200px;
-    height: 671px;
+    height: 770px;
     margin: auto;
+    background-color: #FFFFFF;
+}
+
+.upper {
     border: 1px solid black;
 }
 
 .search {
     margin: auto;
-    width: 750px;
-    height: 150px;
+    width: 500px;
+    padding-bottom: 50px;
     text-align: center;
 }
 
@@ -28,7 +36,6 @@ li {
     position: absolute;
     display: block;
     width: 504px;
-    left: 547px;
     text-align: left;
     border: 1px solid black;
     background-color: #F1F1F1;
@@ -51,18 +58,21 @@ li {
     padding-top: 5px;
 }
 
+#list, #undansyning, #actual, #framsyning_vindeyga, #preview_window {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+}
+
 #list {
     width: 294px;
     height: 480px;
     float: left;
-    border: 1px solid black;
 }
 
 #undansyning {
     width: 300px;
     height: 480px;
     float: left;
-    border: 1px solid black;
     overflow: auto;
 }
 
@@ -70,7 +80,6 @@ li {
     width: 300px;
     height: 480px;
     float: left;
-    border: 1px solid black;
     overflow: auto;
 }
 
@@ -81,10 +90,10 @@ li {
 }
 
 #preview_window {
-    width: 300px;
-    height: 250px;
+    width: 301px;
+    height: 251px;
     float: left;
-    border: 1px solid black;
+    border-right: 1px solid black;
 }
 
 #preview_window_wrapper {
@@ -98,10 +107,10 @@ li {
 }
 
 #framsyning_vindeyga {
-    width: 300px;
+    width: 301px;
     height: 228px;
     float: left;
-    border: 1px solid black;
+    border-right: 1px solid black;
 }
 
 #actual_window {
@@ -139,7 +148,7 @@ li {
     background-color: #FFFFFF;
     position:absolute;
     top:-1em;
-    z-index:-1;
+    /*z-index:-1;*/
 }
 
 .akkordMusYvir {
@@ -147,11 +156,11 @@ li {
     background-color: blue;
     position:absolute;
     top:-1em;
-    z-index:-1;
+    /*z-index:-1;*/
 }
 
 .musIkkiYvir .musYvir {
-    z-index: 0;
+    /*z-index: 0;*/
 }
 
 .akkordVeljiListi {

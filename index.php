@@ -10,24 +10,26 @@
     <script type="text/javascript" src="akkordskipan.js"></script>
     
     <meta charset="utf-8" />
-    <title>Veggur 0.1</title>
+    <title>Vegg</title>
 </head>
 
 <body>
     <div class="wrapper">
-        <a href="framvisari.php" target="_blank">Lat upp framv&iacute;sara</a> - <a href="akkord_framvisari.php" target="_blank">Lat upp akkordframv&iacute;sara</a> - 
-        <a href="#" onclick="sangInnskrivari.byggSangInnskrivan();">N&yacute;ggjan sang</a>
-        <section class="search">
-            <h1>Vegg</h1><br/>
-            <form name="searchform">
-                <input id="search" class="searchbar" type="text" placeholder="Skriva navni&eth;, nummari&eth; ella onkran tekst &uacute;r sanginum, t&uacute; ynskir at finna." autocomplete="off" onkeydown="searcher.sendQuery();" />
-                <br>
+        <section class="upper">
+            <a href="framvisari.php" target="_blank">Lat upp framv&iacute;sara</a> - <a href="akkord_framvisari.php" target="_blank">Lat upp akkordframv&iacute;sara</a> - 
+            <a href="#" onclick="sangInnskrivari.byggSangInnskrivan();">N&yacute;ggjan sang</a>
+            <section class="search">
+                <img src="grafikkur/logo.jpg"><br><br>
+                <form name="searchform">
+                    <input id="search" class="searchbar" type="text" placeholder="Skriva navni&eth;, nummari&eth; ella onkran tekst &uacute;r sanginum, t&uacute; ynskir at finna." autocomplete="off" onkeydown="searcher.sendQuery();" />
+                </form>
                 <section id="searchsuggestiondropdown" class="searchsuggestiondropdown-closed">
-                    <ul id="autocomplete-list"></ul>
-                </section>
-            </form>
-            <section id="super"></section>
+                        <ul id="autocomplete-list"></ul>
+                    </section>
+                <section id="msg"></section>
+            </section>
         </section>
+        
         <section id="list">Skr&aacute;
             <ul id="list-list">
             </ul>
