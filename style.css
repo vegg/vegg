@@ -39,6 +39,7 @@ li {
     text-align: left;
     border: 1px solid black;
     background-color: #F1F1F1;
+    z-index: 15;
 }
 
 .nyggjanSang {
@@ -148,7 +149,7 @@ li {
     background-color: #FFFFFF;
     position:absolute;
     top:-1em;
-    /*z-index:-1;*/
+    z-index:5;
 }
 
 .akkordMusYvir {
@@ -172,6 +173,30 @@ li {
     z-index: 100;
 }
 
+.chord-menu {
+    background-color: #FFFFFF;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    margin: 0px;
+}
+
+.note {
+    float:left;
+    list-style-type:none;
+    margin-top: 0em;
+    padding-left: 5px;
+    border-left: 1px solid black;
+}
+
+.menu-body {
+    height: 243px;
+}
+
 .sangPlass {
     margin: 20px 0px 0px 5px;
+}
+
+#jFylg {
+    z-index:10;
 }

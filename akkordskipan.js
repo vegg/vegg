@@ -1,9 +1,17 @@
-var akkord = function() {
+var akkord = function(akk1, akk2, akk3) {
     var akkordir1 = ["","A","Bb","H","C","C#","D","D#","E","F","F#","G","G#"],
         akkordir2 = ["","m", "7", "m7", "maj7", "m-maj7", "sus2", "sus4", "dimm", "aug"],
         akkordir3 = ["","/A","/Bb","/H","/C","/C#","/D","/D#","/E","/F","/F#","/G","/G#"],
         akkUndirGerd = ["", "", ""];
         akkJSON = {};
+    
+    akkJSON[1] = akk1 || undefined;
+    akkJSON[2] = akk2 || undefined;
+    akkJSON[3] = akk3 || undefined;
+    
+    akkUndirGerd[0] = akkordir1[akk1] || "";
+    akkUndirGerd[1] = akkordir2[akk2] || "";
+    akkUndirGerd[2] = akkordir3[akk3] || "";
     
     return {
         addAkk : function(akkNr,akkList) {
@@ -20,11 +28,19 @@ var akkord = function() {
                 akkJSON[3] = akkNr;
             }
         },
+        removeAkk : function(akkList) {
+            akkUndirGerd[akkList-1] = "";
+            akkJSON[akkList] = undefined;
+        },
         toString: function() {
             return akkUndirGerd[0] + akkUndirGerd[1] + akkUndirGerd[2];
         },
         toJSON : function() {
-            return akkJSON;
+            return {
+                1 : akkJSON[1] || undefined,
+                2 : akkJSON[2] || undefined,
+                3 : akkJSON[3] || undefined
+            };
         }
     };
 };
@@ -44,7 +60,7 @@ var akkordSkipan = {
     akkordir3 : ["","/A","/Bb","/H","/C","/C#","/D","/D#","/E","/F","/F#","/G","/G#"],
     akkordirISangi : {},
     akkordUndirGerd : {},
-    chordUndirGerd : {},
+    chordUndirGerd : undefined,
     sangTekstKelda : undefined,
     akkordKelda : undefined,
     kelduSlag : "",
@@ -139,6 +155,7 @@ var akkordSkipan = {
         this.markeringByrjan = null;
         this.markeringEndi = null;
         this.akkordirISangi = {};
+        this.chordUndirGerd = undefined;
         
         if(typeof kelduSlag === "undefined") {
             kelduSlag = "";
@@ -280,7 +297,7 @@ var akkordSkipan = {
         var versOgAkkordir = [];
         var akkordir = [];
         var einAkkord = [];
-        var akkord = {};
+        //var akkord = {};
         var ordId;
         var akkordId;
         var i;
@@ -290,6 +307,7 @@ var akkordSkipan = {
         var fyrstaAkkord;
         var peikarA = false;
         var talAvAkk = 0;
+        var chord;
         
         if(typeof this.akkordKelda !== "undefined") {
             $.each(this.akkordKelda, function(index,value) {
@@ -319,32 +337,50 @@ var akkordSkipan = {
                     //Far ígjøgnum linkaða listan og koyr akkordir í skipanina
                     akkordSkipan.ordSumErMarkerad = index;
                     akkordSkipan.bokstavurSumErMarkeradur = 1;
+                    /*
                     akkordSkipan.velAkkord(value[fyrstaAkkord][1],1);
                     
                     if(typeof value[fyrstaAkkord][2] !== "undefined") {
                         akkordSkipan.velAkkord(value[fyrstaAkkord][2],2);
-                    }
+                    }*/
+                    
+                    chord = akkord(value[fyrstaAkkord][1], value[fyrstaAkkord][2], value[fyrstaAkkord][3]);
+                    akkordSkipan.velAkkord(chord,10);
+                    
                     
                     if(talAvAkk > 1) {
                         while(typeof value[n] !== "undefined" && typeof value[n]['n'] !== "undefined") {
                             akkordSkipan.bokstavurSumErMarkeradur = akkordSkipan.bokstavurSumErMarkeradur + 2;
                             akkordSkipan.markeringByrjan = akkordSkipan.bokstavurSumErMarkeradur;
+                            
+                            /*
                             akkordSkipan.velAkkord(value[n][1],1);
                             
                             if(typeof value[n][2] !== "undefined") {
                                 akkordSkipan.velAkkord(value[n][2],2);
                             }
+                            */
+                            
+                            chord = akkord(value[n][1], value[n][2], value[n][3]);
+                            akkordSkipan.velAkkord(chord,10);
                             
                             n = value[n]['n'];
                         }
                         //Síðsta virði kemur ikki við í loopið
                         akkordSkipan.bokstavurSumErMarkeradur = akkordSkipan.bokstavurSumErMarkeradur + 2;
                         akkordSkipan.markeringByrjan = akkordSkipan.bokstavurSumErMarkeradur;
+                        
+                        /*
                         akkordSkipan.velAkkord(value[n][1],1);
                         
                         if(typeof value[n][2] !== "undefined") {
                             akkordSkipan.velAkkord(value[n][2],2);
                         }
+                        
+                        */
+                        
+                        chord = akkord(value[n][1], value[n][2], value[n][3]);
+                        akkordSkipan.velAkkord(chord,10);
                     }
                 }
                 
@@ -353,10 +389,16 @@ var akkordSkipan = {
                     $.each(value, function(key, val) {
                         akkordSkipan.bokstavurSumErMarkeradur = key;
                         akkordSkipan.markeringByrjan = key;
+                        
+                        /*
                         akkordSkipan.velAkkord(val[1],1);
                         if(typeof val[2] !== "undefined") {
                             akkordSkipan.velAkkord(val[2],2);
                         }
+                        */
+                        
+                        chord = akkord(val[1], val[2], val[3]);
+                        akkordSkipan.velAkkord(chord,10);
                         
                         akkordSkipan.markeringByrjan = null;
                     });
@@ -541,8 +583,7 @@ var akkordSkipan = {
         var vinstra = position.left-7;
         var ovara = position.top+20;
         
-        var akkordListi = document.createElement("ul");
-        var akkord;
+        var akkordListi = document.createElement("div");
         var akkordLink;
         
         this.opinAkkListi = akkordMenu;
@@ -551,21 +592,152 @@ var akkordSkipan = {
         document.getElementById("jFylg").style.top = ovara + "px";
         document.getElementById("jFylg").style.left = vinstra + "px";
         
-        akkordListi.setAttribute("class", "akkordVeljiListi");
+        //akkordListi.setAttribute("class", "akkordVeljiListi");
         
-        this.byggAkkordLista(akkordListi,akkordMenu);
+        //this.byggAkkordLista(akkordListi,akkordMenu);
+        this.buildChordList(akkordListi);
         
         document.getElementById("jFylg").innerHTML = "";
         
         document.getElementById("jFylg").appendChild(akkordListi);
         
-        $("a[id*='akkli']").click(function(e) {
+        //Um grundtónin er defineraður, ger ein akkord2-lista
+        /*if(this.akkordirISangi[vId] &&
+           this.akkordirISangi[vId][ordId] &&
+           this.akkordirISangi[vId][ordId][bokstvId] &&
+           this.akkordirISangi[vId][ordId][bokstvId][1]) {*/
+        
+        if(this.akkordirISangi[vId]) {
+            //alert("vers id");
+            if(this.akkordirISangi[vId][ordId]) {
+                //alert("orð id");
+                if(this.akkordirISangi[vId][ordId][bokstvId]) {
+                    //alert("bókstav id");
+                    if(this.akkordirISangi[vId][ordId][bokstvId][1]) {
+                        //alert("akkordlið 1");
+                        this.addMidEntries();
+                        
+                        $("a[id*='akkmid']").click(function(e) {
+                            akkliPettir = $(this).attr('id').split('-');
+                            akkordSkipan.velAkkord(akkliPettir[1],2);
+                            
+                            e.preventDefault();
+                            e.stopPropagation();
+                        });
+                    }
+                }
+            }
+        }
+        
+        $("a[id*='akkroot']").click(function(e) {
             akkliPettir = $(this).attr('id').split('-');
-            akkordSkipan.velAkkord(akkliPettir[1],akkordMenu);
+            akkordSkipan.velAkkord(akkliPettir[1],1);
             
             e.preventDefault();
             e.stopPropagation();
         });
+        
+        $("a[id*='akkbass']").click(function(e) {
+            akkliPettir = $(this).attr('id').split('-');
+            akkordSkipan.velAkkord(akkliPettir[1],3);
+            
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    },
+    
+    buildChordList : function(akkordListi) {
+        var i, j, rootEntry, rootEntryLink, midEntry, midEntryLink, bassEntry, bassEntryLink;
+        var menuBody = document.createElement("div");
+        var grundToni = document.createElement("ul");
+        var bassToni = document.createElement("ul");
+        var midToni = document.createElement("ul");
+        
+        grundToni.setAttribute("class","note");
+        grundToni.setAttribute("id","grundtoni");
+        midToni.setAttribute("class", "note");
+        bassToni.setAttribute("class","note");
+        bassToni.setAttribute("id","basstoni");
+        
+        for(i=1; i<this.akkordir1.length; i++) {
+            rootEntry = document.createElement("li");
+            bassEntry = document.createElement("li");
+            
+            rootEntryLink = document.createElement("a");
+            rootEntryLink.setAttribute("href","#");
+            rootEntryLink.setAttribute("id", "akkroot-"+i);
+            rootEntryLink.setAttribute("class", "akkord_link");
+            rootEntryLink.appendChild(document.createTextNode(this.akkordir1[i]));
+            
+            bassEntryLink = document.createElement("a");
+            bassEntryLink.setAttribute("href","#");
+            bassEntryLink.setAttribute("id", "akkbass-"+i);
+            bassEntryLink.setAttribute("class", "akkord_link");
+            bassEntryLink.appendChild(document.createTextNode("/"+this.akkordir1[i]));
+            
+            rootEntry.appendChild(rootEntryLink);
+            grundToni.appendChild(rootEntry);
+            
+            bassEntry.appendChild(bassEntryLink);
+            bassToni.appendChild(bassEntry);
+        }
+        
+        menuBody.setAttribute("id", "menu-body");
+        menuBody.setAttribute("class","menu-body");
+        menuBody.appendChild(grundToni);
+        
+        menuBody.appendChild(bassToni);
+        
+        akkordListi.setAttribute("class","chord-menu");
+        akkordListi.appendChild(menuBody);
+        
+        /*
+        //Um grundtónin er defineraður, ger ein akkord2-lista
+        if(this.akkordirISangi[this.vers] &&
+           this.akkordirISangi[this.vers][this.ordSumErMarkerad] &&
+           this.akkordirISangi[this.vers][this.ordSumErMarkerad][this.bokstavurSumErMarkeradur] &&
+           this.akkordirISangi[this.vers][this.ordSumErMarkerad][this.bokstavurSumErMarkeradur][1]) {
+            
+            for(j=1; j<this.akkordir2.length; j++) {
+                midEntry = document.createElement("li");
+                midEntryLink = document.createElement("a");
+                midEntryLink.setAttribute("href","#");
+                midEntryLink.setAttribute("id", "akkmid-"+j);
+                midEntryLink.setAttribute("class", "akkord_link");
+                midEntryLink.appendChild(document.createTextNode(this.akkordir2[j]));
+                
+                midEntry.appendChild(midEntryLink);
+                midToni.appendChild(midEntry);
+            }
+            
+            menuBody.appendChild(midToni);
+           
+           this.addMidEntries();
+           
+        }
+        */
+    },
+    
+    addMidEntries : function() {
+        var midEntries, midEntry, midEntryLink,j;
+        
+        midEntries = document.createElement("ul");
+        midEntries.setAttribute("id","midtoni");
+        midEntries.setAttribute("class","note");
+        
+        for(j=1; j<this.akkordir2.length; j++) {
+            midEntry = document.createElement("li");
+            midEntryLink = document.createElement("a");
+            midEntryLink.setAttribute("href","#");
+            midEntryLink.setAttribute("id", "akkmid-"+j);
+            midEntryLink.setAttribute("class", "akkord_link");
+            midEntryLink.appendChild(document.createTextNode(this.akkordir2[j]));
+            
+            midEntry.appendChild(midEntryLink);
+            midEntries.appendChild(midEntry);
+        }
+        
+        document.getElementById("menu-body").insertBefore(midEntries, document.getElementById("basstoni"));
         
     },
     
@@ -629,20 +801,79 @@ var akkordSkipan = {
         fyrstaAkkord,
         tempN, tempH,
         markOrd = this.ordSumErMarkerad,
-        markBokstv = this.bokstavurSumErMarkeradur;
+        markBokstv = this.bokstavurSumErMarkeradur,
+        temp,
+        chordCount = 0;
         
         
         if(this.kelduSlag === "skra") {
-            document.getElementById("jFylg").innerHTML = "";
+            //document.getElementById("jFylg").innerHTML = "";
         }
-        
+        /*
         if(akkordMenu == 1) {
-            this.akkordUndirGerd = {};
+            this.akkordUndirGerd = {}; // skal slettast skjótt
             this.chordUndirGerd = akkord();
         }
+        else if(akkordMenu == 3 && (!this.akkordirISangi[this.vers] || !this.akkordirISangi[this.vers][markOrd+""] || !this.akkordirISangi[this.vers][markOrd+""][markBokstv])) {
+            this.chordUndirGerd = akkord();
+        }
+        */
         
-        this.akkordUndirGerd[akkordMenu] = akkordNr;
+        if(akkordMenu == 10) {
+            this.chordUndirGerd = akkordNr;
+        }
+        /*
+        this.akkordUndirGerd[akkordMenu] = akkordNr; // skal slettast skjótt
         this.chordUndirGerd.addAkk(akkordNr, akkordMenu);
+        */
+        
+        else {
+            if(!this.chordUndirGerd) {
+                this.chordUndirGerd = akkord();
+            }
+            
+            this.chordUndirGerd.addAkk(akkordNr, akkordMenu);
+            
+            if(this.akkordirISangi[this.vers] && this.akkordirISangi[this.vers][markOrd+""]) {
+                $.each(this.akkordirISangi[this.vers][markOrd+""], function(key, value) {
+                    chordCount++;
+                });
+                 if(chordCount === 1) {
+                    markBokstv = 1;
+                 }
+            }
+            
+            if(!this.akkordirISangi[this.vers] ||
+               !this.akkordirISangi[this.vers][markOrd+""] ||
+               !this.akkordirISangi[this.vers][markOrd+""][markBokstv] ||
+               !this.akkordirISangi[this.vers][markOrd+""][markBokstv][1]) {
+                if(akkordMenu != 1) {
+                    this.chordUndirGerd.removeAkk(1);
+                }
+            }
+            else {
+                if(akkordMenu != 1) {
+                    this.chordUndirGerd.addAkk(this.akkordirISangi[this.vers][markOrd+""][markBokstv][1],1);
+                }
+            }
+            if(!this.akkordirISangi[this.vers] ||
+               !this.akkordirISangi[this.vers][markOrd+""] ||
+               !this.akkordirISangi[this.vers][markOrd+""][markBokstv] ||
+               !this.akkordirISangi[this.vers][markOrd+""][markBokstv][2]) {
+                if(akkordMenu != 2) {
+                    this.chordUndirGerd.removeAkk(2);
+                }
+            }
+            if(!this.akkordirISangi[this.vers] ||
+               !this.akkordirISangi[this.vers][markOrd+""] ||
+               !this.akkordirISangi[this.vers][markOrd+""][markBokstv] ||
+               !this.akkordirISangi[this.vers][markOrd+""][markBokstv][3]) {
+                if(akkordMenu != 3) {
+                    this.chordUndirGerd.removeAkk(3);
+                }
+            }
+            
+        }
         
         //Um ein akkord longu er á orðinum.
         if(this.akkordirISangi[this.vers] && this.akkordirISangi[this.vers][markOrd+""]) {
@@ -712,7 +943,7 @@ var akkordSkipan = {
         }
         
         if(this.kelduSlag === "skra") {
-            if(this.opinAkkListi === 0) {
+            /*if(this.opinAkkListi === 0) {
                 dokumentLutur.menuOpin = true;
                 dokumentLutur.menuId = "akkordVeljiListi";
                 this.innsetAkkordVeljara(this.vers,this.ordSumErMarkerad, this.bokstavurSumErMarkeradur, 1);
@@ -725,7 +956,8 @@ var akkordSkipan = {
             else if(this.opinAkkListi === 2) {
                 dokumentLutur.menuOpin = false;
                 dokumentLutur.menuId = ""; 
-            }
+            }*/
+            this.innsetAkkordVeljara(this.vers, markOrd, this.markeringByrjan, 1);
         }
     },
     
