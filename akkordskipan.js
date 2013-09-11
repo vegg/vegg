@@ -682,6 +682,8 @@ var akkordSkipan = {
             bassToni.appendChild(bassEntry);
         }
         
+        
+        
         menuBody.setAttribute("id", "menu-body");
         menuBody.setAttribute("class","menu-body");
         menuBody.appendChild(grundToni);
@@ -792,7 +794,7 @@ var akkordSkipan = {
         akkordTekstur,
         //akkord = {},
         tempAkkord = {},
-        i,
+        i,j,
         tempP,
         akkordTilVinstru,
         akkordTilHogru,
@@ -819,6 +821,7 @@ var akkordSkipan = {
         }
         */
         
+        //Hetta verður true tá akkordirnar verða heintaðar frá kelduni.
         if(akkordMenu == 10) {
             this.chordUndirGerd = akkordNr;
         }
@@ -827,12 +830,31 @@ var akkordSkipan = {
         this.chordUndirGerd.addAkk(akkordNr, akkordMenu);
         */
         
+        //Hetta er true, tá ein akkord verður vald av brúkaranum
         else {
-            if(!this.chordUndirGerd) {
+            //if(!this.chordUndirGerd) {
                 this.chordUndirGerd = akkord();
-            }
+            //}
+            
             
             this.chordUndirGerd.addAkk(akkordNr, akkordMenu);
+            
+            if(this.markeringByrjan == 1) {
+                markBokstv = 1;
+            }
+            
+            for(j=1; j<=3; j++) {
+                if(this.akkordirISangi[this.vers] &&
+                   this.akkordirISangi[this.vers][markOrd+""] &&
+                   this.akkordirISangi[this.vers][markOrd+""][markBokstv] &&
+                   this.akkordirISangi[this.vers][markOrd+""][markBokstv][j]) {
+                    if(akkordMenu != j) {
+                        this.chordUndirGerd.addAkk(this.akkordirISangi[this.vers][markOrd+""][markBokstv][j], j);
+                    }
+                }
+            }
+            
+            /*
             
             if(this.akkordirISangi[this.vers] && this.akkordirISangi[this.vers][markOrd+""]) {
                 $.each(this.akkordirISangi[this.vers][markOrd+""], function(key, value) {
@@ -872,6 +894,8 @@ var akkordSkipan = {
                     this.chordUndirGerd.removeAkk(3);
                 }
             }
+            
+            */
             
         }
         
@@ -957,7 +981,9 @@ var akkordSkipan = {
                 dokumentLutur.menuOpin = false;
                 dokumentLutur.menuId = ""; 
             }*/
-            this.innsetAkkordVeljara(this.vers, markOrd, this.markeringByrjan, 1);
+            if(akkordMenu != 10) {
+                this.innsetAkkordVeljara(this.vers, markOrd, this.markeringByrjan, 1);
+            }
         }
     },
     
