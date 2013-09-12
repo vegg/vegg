@@ -393,7 +393,8 @@ var framsyning = {
     
     koyrIAkkFeed : function(sangNr, versNr) {
         var sang = {};
-        var akkordir = skra.songKeeper[sangNr]['sang']['sang_akkordir'];
+        var akkordir = skra.songKeeper[sangNr]['sang']['sang_akkordir'],
+        sang_id_db;
         
         $.each(akkordir, function(index, value) {
             if(typeof value !== "undefined") {
@@ -402,6 +403,10 @@ var framsyning = {
         });
         
         akkordir = JSON.stringify(akkordir);
+        
+        sang_id_db = skra.songKeeper[sangNr]['sang']['sang_id'];
+        sang['sangid'] = sang_id_db;
+        
         sang = JSON.stringify(sang);
         
         if(akkordir) {
