@@ -763,6 +763,10 @@ var akkordSkipan = {
             e.preventDefault();
             e.stopPropagation();
             
+            if(akkordSkipan.markeringByrjan == 1) {
+                akkordSkipan.bokstavurSumErMarkeradur = 1;
+            }
+            
             //tel hvussu nógvar akkordir eru í orðinum
             $.each(akkordSkipan.akkordirISangi[akkordSkipan.vers][akkordSkipan.ordSumErMarkerad+""][akkordSkipan.bokstavurSumErMarkeradur], function(key, val) {
                 if(key == 1 || key == 2 || key == 3) {
@@ -776,6 +780,7 @@ var akkordSkipan = {
                 akkordSkipan.strikaAkkord(akkordSkipan.vers, akkordSkipan.ordSumErMarkerad, akkordSkipan.bokstavurSumErMarkeradur);
             }
             else if(countChords > 1) {
+                
                 //So at h og n ikki fara vekk.
                 if(typeof akkordSkipan.akkordirISangi[akkordSkipan.vers][akkordSkipan.ordSumErMarkerad][akkordSkipan.bokstavurSumErMarkeradur]['n'] !== "undefined") {
                     tempN = akkordSkipan.akkordirISangi[akkordSkipan.vers][akkordSkipan.ordSumErMarkerad][akkordSkipan.bokstavurSumErMarkeradur]['n'];
