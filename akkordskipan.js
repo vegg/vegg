@@ -181,7 +181,7 @@ var akkordSkipan = {
         this.bokstavamongIMinkadumOrdi = null;
         this.markeringByrjan = null;
         this.markeringEndi = null;
-        this.akkordirISangi = {};
+        this.akkordirISangi[versId] = {}; //Fer hetta at bróta skipanina?
         this.chordUndirGerd = undefined;
         
         if(typeof kelduSlag === "undefined") {
@@ -1209,30 +1209,32 @@ var akkordSkipan = {
         }
         
         if(!jQuery.isEmptyObject(this.akkordirISangi[this.vers])) {
-            $.each(this.akkordirISangi[this.vers],function(key, val) {
-                $.each(akkordSkipan.akkordirISangi[akkordSkipan.vers][key], function(k,v) {
-                    var bass = "",
-                    grundToni = "";
-                    
-                    tempAkk = "";
-                    
-                    if(typeof v[1] !== "undefined") {
-                        grundToni = akkordSkipan.akkordir1[((parseInt(v[1])+akkordSkipan.transponering) % 12)+1]
-                    }
-                    if(typeof v[2] !== "undefined") {
-                        tempAkk = akkordSkipan.akkordir2[v[2]];
-                    }
-                    if(typeof v[3] !== "undefined") {
-                        bass = akkordSkipan.akkordir3[((parseInt(v[3])+akkordSkipan.transponering) % 12)+1];
-                    }
-                    
-                    tempAkk = grundToni + tempAkk + bass;
-                    document.getElementById("akk"+akkordSkipan.vers+"-"+key+"-"+k+"-innan").innerHTML = tempAkk;
-                    akkordSkipan.flytTekstFyriAkk(tempAkk, key,k);
+            $.each(this.akkordirISangi, function(kkey, vval) {
+                $.each(akkordSkipan.akkordirISangi[kkey],function(key, val) {
+                    $.each(akkordSkipan.akkordirISangi[kkey][key], function(k,v) {
+                        var bass = "",
+                        grundToni = "";
+                        
+                        tempAkk = "";
+                        
+                        if(typeof v[1] !== "undefined") {
+                            grundToni = akkordSkipan.akkordir1[((parseInt(v[1])+akkordSkipan.transponering) % 12)+1]
+                        }
+                        if(typeof v[2] !== "undefined") {
+                            tempAkk = akkordSkipan.akkordir2[v[2]];
+                        }
+                        if(typeof v[3] !== "undefined") {
+                            bass = akkordSkipan.akkordir3[((parseInt(v[3])+akkordSkipan.transponering) % 12)+1];
+                        }
+                        
+                        tempAkk = grundToni + tempAkk + bass;
+                        
+                        document.getElementById("akk"+kkey+"-"+key+"-"+k+"-innan").innerHTML = tempAkk;
+                        //akkordSkipan.flytTekstFyriAkk(tempAkk, key,k);
+                    });
                 });
             });
         }
-
     },
     
     strikaAkkord : function(vId, markeraOrd, markeradurbokstv, akkordLid) {
