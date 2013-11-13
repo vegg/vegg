@@ -924,10 +924,12 @@ var akkordSkipan = {
         }
         
         //Um ein akkord longu er á orðinum.
-        if(this.akkordirISangi[this.vers] && this.akkordirISangi[this.vers][markOrd+""]) {
-        }
-        else if(markOrd != this.ordSumErMinkad) {
-            this.markeringByrjan = 1;
+        if(akkordMenu != 10) {
+            if(this.akkordirISangi[this.vers] && this.akkordirISangi[this.vers][markOrd+""]) {
+            }
+            else if(markOrd != this.ordSumErMinkad) {
+                this.markeringByrjan = 1;
+            }
         }
         
         //Um akkordin verður koyrd á eitt millumrúm
