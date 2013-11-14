@@ -364,6 +364,7 @@ var akkordSkipan = {
                     //Far ígjøgnum linkaða listan og koyr akkordir í skipanina
                     akkordSkipan.ordSumErMarkerad = index;
                     akkordSkipan.bokstavurSumErMarkeradur = 1;
+                    akkordSkipan.markeringByrjan = akkordSkipan.bokstavurSumErMarkeradur;
                     /*
                     akkordSkipan.velAkkord(value[fyrstaAkkord][1],1);
                     
