@@ -145,7 +145,12 @@ var undansyning = {
         
         //koyr versini inná undansýning
         for(var key in skra.songKeeper[sangNr]['sang']['sang_innihald']) {
-            fullSong += "<p id='us_vers"+i+"' onclick='undansyning.sendToPreviewWindow(\""+i+"\",\"fast\");'>" + skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+i]+ "</p>";
+            fullSong +=
+            "<p id='us_vers"+i+"' onclick='undansyning.sendToPreviewWindow(\""+i+"\",\"fast\");'>"
+                + skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+i]+
+            "</p>" +
+            '<a href="#" onclick="akkordSkipan.tendra(\'skra\',\''+sangNr+'\',\''+i+'\');">Akkordir</a>';
+            
             i++;
             this.VERS_NOGD++;
         }
