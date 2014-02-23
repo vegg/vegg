@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Projection of feed</title>
+    <title>Framv&iacute;sari</title>
     <script src="jquery.min.js"></script>
     <style>
         body {
