@@ -18,6 +18,11 @@
             top:-1em;
             z-index:-1;
         }
+        
+        .sangPlass {
+            float: left;
+            margin-right:1em;
+        }
     </style>
 </head>
 <body>
