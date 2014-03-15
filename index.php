@@ -21,7 +21,7 @@
             <div class="search">
                 <img src="grafikkur/logo.jpg"><br><br>
                 <form name="searchform">
-                    <input id="search" class="searchbar" type="text" placeholder="Skriva navni&eth;, nummari&eth; ella onkran tekst &uacute;r sanginum, t&uacute; ynskir at finna." autocomplete="off" onkeydown="searcher.sendQuery();" />
+                    <input id="search" class="searchbar" type="text" placeholder="Skriva navni&eth;, nummari&eth; ella onkran tekst &uacute;r sanginum, t&uacute; ynskir at finna." autocomplete="off" onkeyup="searcher.sendQuery();" />
                 </form>
                 <div id="searchsuggestiondropdown" class="searchsuggestiondropdown-closed">
                         <ul id="autocomplete-list"></ul>

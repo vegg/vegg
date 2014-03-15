@@ -16,11 +16,13 @@ else {
         //$mysqli->set_charset("utf8");
         $leitiOrd = $_POST['key'];
         $leitiOrd = $mysqli->real_escape_string($leitiOrd);
-        //$leitiOrd = urldecode($leitiOrd);
         
-        //echo $leitiOrd;
-        
-        $fyrisp = "SELECT * FROM sangir WHERE sang_tittul LIKE \"%$leitiOrd%\" OR sang_innihald LIKE \"%$leitiOrd%\"";
+        if($leitiOrd == "" or $leitiOrd == " " or $leitiOrd == null) {
+            $fyrisp = "SELECT * FROM sangir WHERE 1=2";
+        }
+        else {
+            $fyrisp = "SELECT * FROM sangir WHERE sang_tittul LIKE \"%$leitiOrd%\" OR sang_innihald LIKE \"%$leitiOrd%\" LIMIT 5";
+        }
         
         leita($mysqli, $fyrisp);
     }
