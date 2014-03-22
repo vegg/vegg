@@ -1,7 +1,7 @@
 var akkord = function(akk1, akk2, akk3) {
     var akkordir1 = ["","A","Bb","H","C","C#","D","D#","E","F","F#","G","G#"],
         akkordir2 = ["","m", "7", "m7", "maj7", "m-maj7", "sus2", "sus4", "dimm", "aug"],
-        akkordir3 = ["","/A","/Bb","/H","/C","/C#","/D","/D#","/E","/F","/F#","/G","/G#"],
+        akkordir3 = ["","/a","/bb","/h","/c","/c#","/d","/d#","/e","/f","/f#","/g","/g#"],
         akkUndirGerd = ["", "", ""];
         akkJSON = {};
     
@@ -58,7 +58,7 @@ var akkordSkipan = {
     markeringEndi : null,
     akkordir1 : ["","A","Bb","H","C","C#","D","D#","E","F","F#","G","G#"],
     akkordir2 : ["","m", "7", "m7", "maj7", "m-maj7", "sus2", "sus4", "dimm", "aug"],
-    akkordir3 : ["","/A","/Bb","/H","/C","/C#","/D","/D#","/E","/F","/F#","/G","/G#"],
+    akkordir3 : ["","/a","/bb","/h","/c","/c#","/d","/d#","/e","/f","/f#","/g","/g#"],
     akkordirISangi : {},
     akkordUndirGerd : {},
     chordUndirGerd : undefined,
@@ -705,7 +705,7 @@ var akkordSkipan = {
             bassEntryLink.setAttribute("href","#");
             bassEntryLink.setAttribute("id", "akkbass-"+i);
             bassEntryLink.setAttribute("class", "akkord_link");
-            bassEntryLink.appendChild(document.createTextNode("/"+this.akkordir1[i]));
+            bassEntryLink.appendChild(document.createTextNode(this.akkordir3[i]));
             
             rootEntry.appendChild(rootEntryLink);
             grundToni.appendChild(rootEntry);

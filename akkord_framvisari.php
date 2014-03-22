@@ -60,8 +60,8 @@
     
     </script>
     
-    <p>Transponera: <a id="upp" href="#">+</a>
-    <a id="nidur" href="#">-</a>
+    <p>Transponera: <a id="upp" href="#">&#35;</a>
+    <a id="nidur" href="#">b</a>
     <a id="nullstilla" href="#">0</a></p>
     
     <p id="sang"></p>
