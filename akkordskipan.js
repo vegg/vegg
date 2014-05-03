@@ -74,9 +74,9 @@ var akkordSkipan = {
         //Heintar frá skra objektinum í lutir.js
         if(kelduSlag === "skra") {
             this.vers = versId;
-            this.sangTekstKelda = skra.songKeeper[UISangId].sang.sang_innihald['vers'+versId];
-            if(skra.songKeeper[UISangId] !== "undefined" && skra.songKeeper[UISangId].sang.sang_akkordir[versId] !== "undefined") {
-                this.akkordKelda = skra.songKeeper[UISangId].sang.sang_akkordir[versId];
+            this.sangTekstKelda = schedule.getItem(UISangId).sang_innihald['vers'+versId];
+            if(schedule.getItem(UISangId) !== "undefined" && schedule.getItem(UISangId).sang_akkordir[versId] !== "undefined") {
+                this.akkordKelda = schedule.getItem(UISangId).sang_akkordir[versId];
             }
             
             this.kelduSlag = "skra";
@@ -1342,11 +1342,11 @@ var akkordSkipan = {
     goymAkkordir : function() {
         var sendastTilDB = "";
         
-        if(skra.songKeeper[undansyning.VALDUR_SANGUR]) {
-            skra.songKeeper[undansyning.VALDUR_SANGUR].sang.sang_akkordir[this.vers] = this.akkordirISangi[this.vers];
+        if(schedule.getItem(undansyning.VALDUR_SANGUR)) {
+            schedule.getItem(undansyning.VALDUR_SANGUR).sang_akkordir[this.vers] = this.akkordirISangi[this.vers];
         }
         
-        sendastTilDB = JSON.stringify(skra.songKeeper[undansyning.VALDUR_SANGUR].sang.sang_akkordir);
+        sendastTilDB = JSON.stringify(schedule.getItem(undansyning.VALDUR_SANGUR).sang_akkordir);
         
         //$.post("innskrivaakk.php",{"sang_id":undansyning.valdur_sangurDB,"akkordir":sendastTilDB});
         $.post("databasi.php",{slag:"akkinnskriva","sang_id":undansyning.valdur_sangurDB,"akkordir":sendastTilDB});

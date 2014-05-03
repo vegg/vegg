@@ -3,6 +3,59 @@ dokumentLutur = {
     menuId : ""
 };
 
+var Schedule = function() {
+    var schedule = [];
+    return {
+        fetchFromDB : function(DBid) {
+            $.ajax({
+            url:"databasi.php",
+            type:"post",
+            data:{key:DBid,slag:"takting"},
+            success:function(output) {
+                $.each(output, function(key,val) {
+                    var key = "lis" + schedule.length;
+                    
+                    $('#list-list').append('<li id="'+key+'"><a id="'+key+'_lnk" href="#" onclick="undansyning.sendTilUndansyning(\''+
+                                           key+'\');">'+val['sang_tittul']+'</a> - <a href="#" onclick="schedule.deleteItem(\''+key+
+                                           '\');">X</a><a href="#" onclick="framsyning.koyrIFramsyning('+schedule.length+
+                                           ')"><img src="grafikkur/kanon.bmp" style="position:relative;top:5px;left:5px;"></a></li>');
+                    schedule.push(output);
+                });
+            },
+            dataType:"json"
+        });
+        
+        //Tøm leitikassan
+        document.getElementById("search").value = "";
+        document.getElementById("autocomplete-list").innerHTML = "";
+        $('#searchsuggestiondropdown').attr('class', 'searchsuggestiondropdown-closed');
+        },
+        
+        getItem : function(schedId) {
+            return schedule[schedId]['sang'];
+        },
+        
+        deleteItem : function(id) { 
+            $("#"+id).remove();
+            delete schedule[id[3]];
+            
+            //Koyr sangin vekk úr framsýning
+            if(framsyning.UI_SANG_NR_I_BRUKI == id[3]) {
+                framsyning.ruddaFramsyning();
+                framsyning.ruddaStorskyggja();
+            }
+            
+            //Koyr sangin vekk úr undansýning.
+            if(undansyning.VALDUR_SANGUR == id[3]) {
+                undansyning.skapaUndansyning();
+                undansyning.ruddaUndansyningarvindeyga();
+            }
+        }
+    };
+};
+
+var schedule = Schedule();
+
 //Heldur skil á øllum sum hevur við leitikassan at gera
 searchBox = function() {
     //VARIABLAR
@@ -35,7 +88,7 @@ searchBox = function() {
             data:{key:search,slag:"leita"},
             success:function(output){
                 $.each(output, function(key,val) {
-                        $('#autocomplete-list').append('<a href="#" onclick="skra.fetchSong('+key+');"><li>'+val['sang_tittul']+'</li></a>');
+                        $('#autocomplete-list').append('<a href="#" onclick="schedule.fetchFromDB('+key+');"><li>'+val['sang_tittul']+'</li></a>');
                         $('#searchsuggestiondropdown').attr('class', 'searchsuggestiondropdown-open');
                     });
             },
@@ -51,75 +104,6 @@ searchBox = function() {
         }
     };
 };
-
-
-var skra = {
-    //VARIABLAR
-    songKeeper : [], //http://blog.jcoglan.com/2007/07/23/writing-a-linked-list-in-javascript/
-    songMenuNum : 0,
-    
-    //FUNKTIÓNIR
-    fetchSong : function(songId) {
-        /*
-        $.getJSON('finnsang.php?key=' + songId+ '',
-        function(output) {
-            $.each(output, function(key,val) {
-                var songKey = "lis" + skra.songMenuNum;
-                skra.songKeeper.push(output);
-                
-                $('#list-list').append('<li id="'+songKey+'"><a id="'+songKey+'_lnk" href="#" onclick="undansyning.sendTilUndansyning(\''+
-                                       songKey+'\');">'+val['sang_tittul']+'</a> - <a href="#" onclick="skra.strikaILista(\''+songKey+
-                                       '\');">X</a><a href="#" onclick="framsyning.koyrIFramsyning('+skra.songMenuNum+
-                                       ')"><img src="grafikkur/kanon.bmp" style="position:relative;top:5px;left:5px;"></a></li>');
-                skra.songMenuNum++;
-            });
-        });
-        
-        */
-        
-        $.ajax({
-            url:"databasi.php",
-            type:"post",
-            data:{key:songId,slag:"takting"},
-            success:function(output) {
-                $.each(output, function(key,val) {
-                    var songKey = "lis" + skra.songMenuNum;
-                    skra.songKeeper.push(output);
-                    
-                    $('#list-list').append('<li id="'+songKey+'"><a id="'+songKey+'_lnk" href="#" onclick="undansyning.sendTilUndansyning(\''+
-                                           songKey+'\');">'+val['sang_tittul']+'</a> - <a href="#" onclick="skra.strikaILista(\''+songKey+
-                                           '\');">X</a><a href="#" onclick="framsyning.koyrIFramsyning('+skra.songMenuNum+
-                                           ')"><img src="grafikkur/kanon.bmp" style="position:relative;top:5px;left:5px;"></a></li>');
-                    skra.songMenuNum++;
-                });
-            },
-            dataType:"json"
-        });
-        
-        //Tøm leitikassan
-        document.getElementById("search").value = "";
-        document.getElementById("autocomplete-list").innerHTML = "";
-        $('#searchsuggestiondropdown').attr('class', 'searchsuggestiondropdown-closed');
-    },
-    
-    strikaILista : function(id) { 
-        $("#"+id).remove();
-        delete skra.songKeeper[id[3]];
-        
-        //Koyr sangin vekk úr framsýning
-        if(framsyning.UI_SANG_NR_I_BRUKI == id[3]) {
-            framsyning.ruddaFramsyning();
-            framsyning.ruddaStorskyggja();
-        }
-        
-        //Koyr sangin vekk úr undansýning.
-        if(undansyning.VALDUR_SANGUR == id[3]) {
-            undansyning.skapaUndansyning();
-            undansyning.ruddaUndansyningarvindeyga();
-        }
-    }
-};
-
 
 var searcher = new searchBox();
 
@@ -144,10 +128,10 @@ var undansyning = {
         //this.skapaAkkordKnott(sangNr);
         
         //koyr versini inná undansýning
-        for(var key in skra.songKeeper[sangNr]['sang']['sang_innihald']) {
+        for(var key in schedule.getItem(sangNr)['sang_innihald']) {
             fullSong +=
             "<p id='us_vers"+i+"' onclick='undansyning.sendToPreviewWindow(\""+i+"\",\"fast\");'>"
-                + skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+i]+
+                + schedule.getItem(sangNr)['sang_innihald']['vers'+i]+
             "</p>" +
             '<a href="#" onclick="akkordSkipan.tendra(\'skra\',\''+sangNr+'\',\''+i+'\');">Akkordir</a>';
             
@@ -157,7 +141,8 @@ var undansyning = {
         document.getElementById("undansyning_tekst").innerHTML = fullSong;
         
         this.VALDUR_SANGUR = sangNr;
-        this.valdur_sangurDB = skra.songKeeper[sangNr]['sang']['sang_id'];
+        this.valdur_sangurDB = schedule.getItem(sangNr)['sang_id'];
+        
     },
     
     sendToPreviewWindow : function(versNummar, stoda) {
@@ -331,8 +316,8 @@ var framsyning = {
         var i = 1;
         var fullSong = "";
         
-        for(var key in skra.songKeeper[sangNr]['sang']['sang_innihald']) {
-            fullSong += "<p id='fs_vers"+i+"' onclick='framsyning.koyrAStorskyggja(\""+sangNr+"\",\""+i+"\")'>" + skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+i]+ "</p>";
+        for(var key in schedule.getItem(sangNr)['sang_innihald']) {
+            fullSong += "<p id='fs_vers"+i+"' onclick='framsyning.koyrAStorskyggja(\""+sangNr+"\",\""+i+"\")'>" + schedule.getItem(sangNr)['sang_innihald']['vers'+i]+ "</p>";
             i++;
         }
         document.getElementById("framsyning_tekst").innerHTML = fullSong;
@@ -353,9 +338,9 @@ var framsyning = {
         var fullSong = "";
             
         if(this.hevurInnihald) {
-            for(var key in skra.songKeeper[this.UI_SANG_NR_I_BRUKI]['sang']['sang_innihald']) {
+            for(var key in schedule.getItem(this.UI_SANG_NR_I_BRUKI)['sang_innihald']) {
                 fullSong += "<p id='fs_vers"+i+"' onclick='framsyning.koyrAStorskyggja(\""+this.UI_SANG_NR_I_BRUKI+"\",\""+i+"\")'>"
-                    + skra.songKeeper[this.UI_SANG_NR_I_BRUKI]['sang']['sang_innihald']['vers'+i].substring(0,80) + "..." + "</p>";
+                    + schedule.getItem(this.UI_SANG_NR_I_BRUKI)['sang_innihald']['vers'+i].substring(0,80) + "..." + "</p>";
                 i++;
             }
             document.getElementById("framsyning_tekst").innerHTML = fullSong;
@@ -367,9 +352,9 @@ var framsyning = {
         var fullSong = "";
             
         if(this.hevurInnihald) {
-            for(var key in skra.songKeeper[this.UI_SANG_NR_I_BRUKI]['sang']['sang_innihald']) {
+            for(var key in schedule.getItem(this.UI_SANG_NR_I_BRUKI)['sang_innihald']) {
                 fullSong += "<p id='fs_vers"+i+"' onclick='framsyning.koyrAStorskyggja(\""+this.UI_SANG_NR_I_BRUKI+"\",\""+i+"\")'>"
-                    + skra.songKeeper[this.UI_SANG_NR_I_BRUKI]['sang']['sang_innihald']['vers'+i] + "</p>";
+                    + schedule.getItem(this.UI_SANG_NR_I_BRUKI)['sang_innihald']['vers'+i] + "</p>";
                 i++;
             }
             document.getElementById("framsyning_tekst").innerHTML = fullSong;
@@ -388,7 +373,7 @@ var framsyning = {
     },
     
     koyrIJSFeed : function(sangNr, versNr) {
-        var sang = skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+versNr];
+        var sang = schedule.getItem(sangNr)['sang_innihald']['vers'+versNr];
         
         //sang = sang.replace("\n", /<br>/g);
         
@@ -398,18 +383,18 @@ var framsyning = {
     
     koyrIAkkFeed : function(sangNr, versNr) {
         var sang = {};
-        var akkordir = skra.songKeeper[sangNr]['sang']['sang_akkordir'],
+        var akkordir = schedule.getItem(sangNr)['sang_akkordir'],
         sang_id_db;
         
         $.each(akkordir, function(index, value) {
             if(typeof value !== "undefined") {
-                sang[index] = skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+index];
+                sang[index] = schedule.getItem(sangNr)['sang_innihald']['vers'+index];
             }
         });
         
         akkordir = JSON.stringify(akkordir);
         
-        sang_id_db = skra.songKeeper[sangNr]['sang']['sang_id'];
+        sang_id_db = schedule.getItem(sangNr).sang_id;
         sang['sangid'] = sang_id_db;
         
         sang = JSON.stringify(sang);
@@ -424,7 +409,7 @@ var framsyning = {
     },
     
     koyrIFramsyningarVindeyga : function(sangNr, versNr) {
-        var sang = skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+versNr];
+        var sang = schedule.getItem(sangNr)['sang_innihald']['vers'+versNr];
         
         sang = sang.replace(/\n/g, "<br>");
         
@@ -469,7 +454,7 @@ var sangInnskrivari = {
         var i=1;
         var vers;
         var reglubrotNogd;
-        var dbas_id = skra.songKeeper[sangNr].sang.sang_id;
+        var dbas_id = schedule.getItem(sangNr).sang_id;
         var sangBroytari =  '<div id="sang-broytari">Broyt sang <span><a href="#" onclick="sangInnskrivari.innskrivaSang(\'broyt\',\''+sangNr+'\');">Goym broyting</a></span>'+
                                 '<ul><input id="databasu_id" type="hidden" value="'+dbas_id+'">' +
                                     '<li>Navn<br><input id="sang_yvirskrift" type="text"></li>' +
@@ -481,21 +466,16 @@ var sangInnskrivari = {
         undansyning.gevPlassFyriSkriving();
         document.getElementById("undansyning").innerHTML = sangBroytari;
         
-        document.getElementById("sang_yvirskrift").value = skra.songKeeper[sangNr]['sang']['sang_tittul'];
+        document.getElementById("sang_yvirskrift").value = schedule.getItem(sangNr)['sang_tittul'];
         
         document.getElementById("sang_innihald").innerHTML = '<ul id="vers_haldari"></ul>';
         
         //Skriva versini inn, hvørt í sín tekstkassa
-        for(var key in skra.songKeeper[sangNr]['sang']['sang_innihald']) {
-            vers = skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+i];
+        for(var key in schedule.getItem(sangNr)['sang_innihald']) {
+            vers = schedule.getItem(sangNr)['sang_innihald']['vers'+i];
             
             //broyt øll html break til reglubrot.
             vers = vers.replace(/<br>/g, "\n");
-            
-            //Stillar eitt "((vers))" ímillum hvørt vers (Ikki brúkt meira!)
-            /*if(skra.songKeeper[sangNr]['sang']['sang_innihald']['vers'+(i+1)]) {
-                vers += "\n((vers))\n";
-            }*/
             
             //Koyr tekstkassan saman við tí rætta versinum inná DOM.
             document.getElementById("vers_haldari").innerHTML +=
@@ -536,17 +516,17 @@ var sangInnskrivari = {
         
         //uppdatera sangin í UI, um talan er um eina broyting
         if(gerd=="broyt") {
-            skra.songKeeper[UIsangId].sang.sang_tittul = yvirskrift;
+            schedule.getItem(UIsangId).sang_tittul = yvirskrift;
             
             //í tí føri at brúkarin vil sletta eitt vers, koyr allan sangin vekk fyri fyrst
-            skra.songKeeper[UIsangId].sang.sang_innihald = {};
+            schedule.getItem(UIsangId).sang_innihald = {};
             
             for(j=1;j<=undansyning.VERS_NOGD;j++) {
                 fyribils_vers = document.getElementById("ns_vers"+j).value;
                 
                 fyribils_vers = fyribils_vers.replace(/\n/g, "<br>");
                 
-                skra.songKeeper[UIsangId].sang['sang_innihald']['vers'+j] = fyribils_vers;
+                schedule.getItem(UIsangId)['sang_innihald']['vers'+j] = fyribils_vers;
             }
             
             document.getElementById("lis"+UIsangId+"_lnk").innerHTML = yvirskrift;
